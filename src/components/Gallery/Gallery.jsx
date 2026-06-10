@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import './Gallery.css';
 import { BookOpen, Camera, Gift, Heart, ChevronLeft, ChevronRight, X, Sparkles, Lightbulb } from 'lucide-react';
+import { triggerFireworks } from '../../utils/fireworks';
 import gallery1 from '../../assets/images/gallery-1.webp';
 import gallery2 from '../../assets/images/gallery-2.webp';
 import gallery3 from '../../assets/images/gallery-3.webp';
@@ -171,6 +172,14 @@ export default function Gallery() {
       document.body.style.overflow = '';
     };
   }, [lightbox.open]);
+
+  /* ── Trigger fireworks immediately when surprise card is active ── */
+  useEffect(() => {
+    const list = photos.filter((p) => p.src);
+    if (list.length > 0 && activeIndex === list.length) {
+      triggerFireworks(window.innerWidth / 2, window.innerHeight / 2);
+    }
+  }, [activeIndex, photos]);
 
   const currentFilledPos = filledIndices.indexOf(lightbox.index) + 1;
 
