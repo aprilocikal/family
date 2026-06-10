@@ -43,10 +43,12 @@ export default function Gallery() {
   useEffect(() => {
     const updateColumnCount = () => {
       const w = window.innerWidth;
-      if (w < 768) {
-        setColumnCount(2); // 2 columns on mobile and tablet
+      if (w < 640) {
+        setColumnCount(2); // 2 columns on mobile
+      } else if (w < 1025) {
+        setColumnCount(3); // 3 columns on tablet
       } else {
-        setColumnCount(3); // 3 columns on desktop
+        setColumnCount(4); // 4 columns on desktop/laptop
       }
     };
     updateColumnCount();

@@ -17,6 +17,11 @@
   margin-bottom: 50px;
 }
 
+.gallery-grid-wrapper {
+  max-width: 960px;
+  margin: 0 auto;
+}
+
 /* ── Photo Grid (Flex Column Masonry) ── */
 .gallery-grid {
   display: flex;
