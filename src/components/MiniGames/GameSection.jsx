@@ -6,6 +6,7 @@ import LoveQuiz from './LoveQuiz';
 import MemoryMatch from './MemoryMatch';
 import CatchHearts from './CatchHearts';
 import './GameSection.css';
+import { X } from 'lucide-react';
 
 const GAMES = [
   {
@@ -110,7 +111,7 @@ export default function GameSection() {
         >
           <div className="game-modal-content glass">
             <button className="game-modal-close" onClick={handleClose}>
-              ✕
+              <X size={20} />
             </button>
             <ActiveComponent onClose={handleClose} />
           </div>

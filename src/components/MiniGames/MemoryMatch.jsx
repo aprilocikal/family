@@ -3,8 +3,16 @@
    ============================================================ */
 import { useState, useEffect, useRef, useCallback } from 'react';
 import './MemoryMatch.css';
+import { Heart, Sparkles, Flame, Smile, Flower, Gift, Gamepad2, Clock, Target } from 'lucide-react';
 
-const EMOJIS = ['🌹', '💕', '🌸', '💖', '🌺', '✨'];
+const CARD_ICONS = [
+  { Icon: Heart, color: '#ff4b82' },
+  { Icon: Sparkles, color: '#ffd700' },
+  { Icon: Flame, color: '#ff9f1c' },
+  { Icon: Smile, color: '#ff70a6' },
+  { Icon: Flower, color: '#ffd1e6' },
+  { Icon: Gift, color: '#e0aaff' },
+];
 
 function shuffleArray(arr) {
   const a = [...arr];
@@ -16,9 +24,9 @@ function shuffleArray(arr) {
 }
 
 function createDeck() {
-  const pairs = EMOJIS.flatMap((emoji, i) => [
-    { id: i * 2, emoji, pairId: i },
-    { id: i * 2 + 1, emoji, pairId: i },
+  const pairs = CARD_ICONS.flatMap((item, i) => [
+    { id: i * 2, iconIndex: i, pairId: i },
+    { id: i * 2 + 1, iconIndex: i, pairId: i },
   ]);
   return shuffleArray(pairs);
 }
@@ -61,7 +69,7 @@ export default function MemoryMatch({ onClose }) {
       setIsChecking(false);
 
       // Check win
-      if (newMatched.length === EMOJIS.length) {
+      if (newMatched.length === CARD_ICONS.length) {
         setGameWon(true);
         clearInterval(timerRef.current);
       }
@@ -106,9 +114,13 @@ export default function MemoryMatch({ onClose }) {
   if (gameWon) {
     return (
       <div className="memory-match">
-        <h3 className="memory-title">Memory Match 🃏</h3>
+        <h3 className="memory-title" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+          Memory Match <Gamepad2 size={20} style={{ color: 'var(--rose-gold)' }} />
+        </h3>
         <div className="memory-victory">
-          <span className="memory-victory-emoji">💕</span>
+          <span className="memory-victory-emoji" style={{ color: 'var(--rose-gold)', display: 'inline-flex', marginBottom: '12px' }}>
+            <Heart size={48} fill="currentColor" />
+          </span>
           <h4 className="memory-victory-title">You found all the love!</h4>
           <p className="memory-victory-stats">
             Time: <strong>{formatTime(timer)}</strong>
@@ -117,7 +129,7 @@ export default function MemoryMatch({ onClose }) {
             Moves: <strong>{moves}</strong>
           </p>
           <p className="memory-victory-msg">
-            Every match is like finding another reason to love you 💕
+            Every match is like finding another reason to love you
           </p>
           <button className="btn-rose" onClick={restart}>
             Play Again
@@ -129,14 +141,16 @@ export default function MemoryMatch({ onClose }) {
 
   return (
     <div className="memory-match">
-      <h3 className="memory-title">Memory Match 🃏</h3>
-
+      <h3 className="memory-title" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+        Memory Match <Gamepad2 size={20} style={{ color: 'var(--rose-gold)' }} />
+      </h3>
+ 
       <div className="memory-stats">
-        <div className="memory-stat">
-          ⏱ <span>{formatTime(timer)}</span>
+        <div className="memory-stat" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+          <Clock size={16} /> <span>{formatTime(timer)}</span>
         </div>
-        <div className="memory-stat">
-          🎯 <span>{moves}</span> moves
+        <div className="memory-stat" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+          <Target size={16} /> <span>{moves}</span> moves
         </div>
       </div>
 
@@ -144,14 +158,18 @@ export default function MemoryMatch({ onClose }) {
         {cards.map((card) => {
           const isFlipped = flipped.includes(card.id);
           const isMatched = matched.includes(card.pairId);
-
+          const iconData = CARD_ICONS[card.iconIndex];
+          const IconComponent = iconData.Icon;
+ 
           return (
             <div
               key={card.id}
               className={`memory-card${isFlipped ? ' flipped' : ''}${isMatched ? ' matched' : ''}`}
               onClick={() => handleCardClick(card.id)}
             >
-              <div className="memory-card-front">{card.emoji}</div>
+              <div className="memory-card-front" style={{ color: iconData.color, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <IconComponent size={32} fill={IconComponent === Heart ? 'currentColor' : 'none'} />
+              </div>
               <div className="memory-card-back" />
             </div>
           );

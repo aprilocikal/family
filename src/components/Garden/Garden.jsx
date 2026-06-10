@@ -3,16 +3,16 @@
    ============================================================ */
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import './Garden.css';
-import { Flower, Flower2, Heart, Sparkles } from 'lucide-react';
+import { Sparkles } from 'lucide-react';
 
 const FLOWERS = [
-  { icon: Flower, color: '#ff4b82', name: 'Rose', message: 'May love always surround you' },
-  { icon: Flower2, color: '#ffb3c6', name: 'Cherry Blossom', message: 'May life always be gentle with you' },
-  { icon: Flower, color: '#d8b4fe', name: 'Lotus', message: 'May you bloom in all your glory' },
-  { icon: Flower2, color: '#ff6b6b', name: 'Hibiscus', message: 'May passion light your every path' },
-  { icon: Flower, color: '#fff0f5', name: 'Daisy', message: 'May joy follow you everywhere' },
-  { icon: Flower2, color: '#d15e9c', name: 'Tulip', message: 'May all your dreams come true' },
-  { icon: Flower, color: '#ffd700', name: 'Sunflower', message: 'May your days shine bright always' },
+  { emoji: '🌹', name: 'Rose', message: 'May love always surround you' },
+  { emoji: '🌸', name: 'Cherry Blossom', message: 'May life always be gentle with you' },
+  { emoji: '🪷', name: 'Lotus', message: 'May you bloom in all your glory' },
+  { emoji: '🌺', name: 'Hibiscus', message: 'May passion light your every path' },
+  { emoji: '🌼', name: 'Daisy', message: 'May joy follow you everywhere' },
+  { emoji: '🌷', name: 'Tulip', message: 'May all your dreams come true' },
+  { emoji: '🌻', name: 'Sunflower', message: 'May your days shine bright always' },
 ];
 
 const PETAL_EMOJIS = ['🌸', '💗', '✨', '💕', '🩷', '🌺', '💮'];
@@ -125,8 +125,8 @@ export default function Garden() {
                 </div>
 
                 {/* Bloom */}
-                <span className="garden-bloom" role="img" aria-label={flower.name} style={{ color: flower.color, display: 'inline-flex' }}>
-                  <flower.icon size={36} />
+                <span className="garden-bloom" role="img" aria-label={flower.name}>
+                  {flower.emoji}
                 </span>
 
                 {/* Stem */}
@@ -141,9 +141,7 @@ export default function Garden() {
           {/* Bouquet wrapper decoration */}
           <div className={`bouquet-wrapper${grown ? ' visible' : ''}`}>
             <div className="bouquet-paper" />
-            <div className="bouquet-ribbon" style={{ background: 'transparent', boxShadow: 'none', border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <Heart size={22} fill="currentColor" style={{ color: 'var(--rose-gold)' }} />
-            </div>
+            <div className="bouquet-ribbon">💝</div>
           </div>
         </div>
 
