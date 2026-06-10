@@ -1,0 +1,263 @@
+/* ===========================
+   LoveLetter Section
+   =========================== */
+
+.love-letter-section {
+  position: relative;
+  padding: 6rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  min-height: 100vh;
+}
+
+/* ---- Floating Petals (absolute) ---- */
+
+.ll-petal {
+  position: absolute;
+  font-size: 1.6rem;
+  opacity: 0.35;
+  pointer-events: none;
+  animation: petal-sway 6s ease-in-out infinite;
+  z-index: 0;
+}
+
+.ll-petal-1 {
+  top: 8%;
+  left: 6%;
+  animation-duration: 7s;
+  animation-delay: 0s;
+  font-size: 1.8rem;
+}
+
+.ll-petal-2 {
+  top: 15%;
+  right: 8%;
+  animation-duration: 8s;
+  animation-delay: 1s;
+  font-size: 1.4rem;
+}
+
+.ll-petal-3 {
+  bottom: 20%;
+  left: 10%;
+  animation-duration: 6.5s;
+  animation-delay: 0.5s;
+  font-size: 1.2rem;
+}
+
+.ll-petal-4 {
+  bottom: 12%;
+  right: 5%;
+  animation-duration: 7.5s;
+  animation-delay: 2s;
+  font-size: 1.5rem;
+}
+
+.ll-petal-5 {
+  top: 50%;
+  left: 3%;
+  animation-duration: 9s;
+  animation-delay: 1.5s;
+  font-size: 1.3rem;
+}
+
+.ll-petal-6 {
+  top: 40%;
+  right: 3%;
+  animation-duration: 8.5s;
+  animation-delay: 0.8s;
+  font-size: 1.6rem;
+}
+
+/* ---- Love Letter Card ---- */
+
+.love-letter-card {
+  position: relative;
+  z-index: 1;
+  max-width: 720px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 3.5rem 3rem;
+  text-align: center;
+  border-radius: 24px;
+  transition: box-shadow 0.5s ease, transform 0.5s ease;
+}
+
+.love-letter-card:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 0 40px rgba(200, 116, 138, 0.25),
+    0 0 80px rgba(200, 116, 138, 0.1),
+    0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+/* ---- Top Flower Decoration ---- */
+
+.ll-top-flowers {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.ll-flower {
+  font-size: 2rem;
+  display: inline-block;
+  animation: float 3s ease-in-out infinite;
+}
+
+.ll-flower-1 {
+  animation-delay: 0s;
+}
+
+.ll-flower-2 {
+  font-size: 2.4rem;
+  animation-delay: 0.4s;
+}
+
+.ll-flower-3 {
+  animation-delay: 0.8s;
+}
+
+/* ---- Title ---- */
+
+.ll-title {
+  margin-top: 0.75rem;
+}
+
+.ll-title em {
+  font-family: var(--font-accent, 'Petit Formal Script', cursive);
+  font-style: normal;
+  color: var(--rose-gold);
+  display: block;
+  font-size: 1.1em;
+  margin-top: 0.15em;
+}
+
+/* ---- Divider ---- */
+
+.ll-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  margin: 1.75rem auto;
+  max-width: 220px;
+}
+
+.ll-divider span:first-child,
+.ll-divider span:last-child {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--rose-gold),
+    transparent
+  );
+  opacity: 0.5;
+}
+
+.ll-divider-heart {
+  color: var(--rose-gold);
+  font-size: 0.9rem;
+  animation: heartbeat 2s ease-in-out infinite;
+}
+
+/* ---- Body Paragraphs ---- */
+
+.ll-body {
+  margin: 2rem 0;
+}
+
+.ll-paragraph {
+  font-family: var(--font-body, 'Cormorant Garamond', serif);
+  font-size: 1.15rem;
+  line-height: 1.9;
+  color: var(--cream);
+  opacity: 0.92;
+  margin-bottom: 1.5rem;
+  text-align: left;
+  text-indent: 2em;
+}
+
+.ll-paragraph:last-child {
+  margin-bottom: 0;
+}
+
+/* ---- Signature ---- */
+
+.ll-signature {
+  font-family: var(--font-accent, 'Petit Formal Script', cursive);
+  font-size: 1.15rem;
+  color: var(--gold-shimmer);
+  margin-top: 2.5rem;
+  letter-spacing: 0.02em;
+}
+
+/* ---- Reveal Animations ---- */
+
+.love-letter-section .reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.love-letter-section .reveal.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.love-letter-section .reveal.reveal-delay-1 { transition-delay: 0.15s; }
+.love-letter-section .reveal.reveal-delay-2 { transition-delay: 0.3s; }
+.love-letter-section .reveal.reveal-delay-3 { transition-delay: 0.5s; }
+.love-letter-section .reveal.reveal-delay-4 { transition-delay: 0.7s; }
+.love-letter-section .reveal.reveal-delay-5 { transition-delay: 0.9s; }
+
+/* ---- Responsive ---- */
+
+@media (max-width: 768px) {
+  .love-letter-section {
+    padding: 4rem 1rem;
+  }
+
+  .love-letter-card {
+    padding: 2.5rem 1.75rem;
+    border-radius: 18px;
+  }
+
+  .ll-paragraph {
+    font-size: 1.05rem;
+    line-height: 1.8;
+  }
+
+  .ll-flower {
+    font-size: 1.6rem;
+  }
+
+  .ll-flower-2 {
+    font-size: 2rem;
+  }
+
+  .ll-petal {
+    font-size: 1.2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .love-letter-card {
+    padding: 2rem 1.25rem;
+  }
+
+  .ll-paragraph {
+    font-size: 1rem;
+    text-indent: 1.5em;
+  }
+
+  .ll-signature {
+    font-size: 1rem;
+  }
+}

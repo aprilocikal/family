@@ -1,0 +1,195 @@
+/* ===========================
+   Reasons Section
+   =========================== */
+
+.reasons-section {
+  position: relative;
+  padding: 6rem 1.5rem;
+  overflow: hidden;
+}
+
+.reasons-section .section-inner {
+  text-align: center;
+}
+
+/* ---- Cards Grid ---- */
+
+.reasons-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.75rem;
+  margin-top: 3.5rem;
+  max-width: 1100px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ---- Individual Card ---- */
+
+.reason-card {
+  position: relative;
+  padding: 2.5rem 2rem;
+  border-radius: 20px;
+  text-align: center;
+  overflow: hidden;
+  transition:
+    transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    box-shadow 0.45s ease,
+    border-color 0.45s ease;
+  cursor: default;
+}
+
+/* Gradient overlay on hover */
+.reason-card-glow {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    135deg,
+    rgba(200, 116, 138, 0.08) 0%,
+    rgba(212, 165, 116, 0.06) 50%,
+    rgba(200, 116, 138, 0.1) 100%
+  );
+  opacity: 0;
+  transition: opacity 0.45s ease;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.reason-card:hover {
+  transform: translateY(-10px);
+  box-shadow:
+    0 0 35px rgba(200, 116, 138, 0.2),
+    0 0 70px rgba(200, 116, 138, 0.08),
+    0 12px 40px rgba(0, 0, 0, 0.3);
+  border-color: rgba(200, 116, 138, 0.5);
+}
+
+.reason-card:hover .reason-card-glow {
+  opacity: 1;
+}
+
+/* ---- Card Content ---- */
+
+.reason-emoji {
+  display: block;
+  font-size: 2.8rem;
+  margin-bottom: 1.25rem;
+  position: relative;
+  z-index: 1;
+  transition: transform 0.4s ease;
+}
+
+.reason-card:hover .reason-emoji {
+  transform: scale(1.15);
+}
+
+.reason-title {
+  font-family: var(--font-display, 'Playfair Display', serif);
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--rose-gold);
+  margin-bottom: 0.75rem;
+  position: relative;
+  z-index: 1;
+  letter-spacing: 0.02em;
+}
+
+.reason-description {
+  font-family: var(--font-body, 'Cormorant Garamond', serif);
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: var(--cream);
+  opacity: 0.85;
+  position: relative;
+  z-index: 1;
+  transition: opacity 0.4s ease;
+}
+
+.reason-card:hover .reason-description {
+  opacity: 1;
+}
+
+/* ---- Reveal Animations ---- */
+
+.reasons-section .reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.reasons-section .reveal.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reasons-section .reveal.reveal-delay-1 { transition-delay: 0.1s; }
+.reasons-section .reveal.reveal-delay-2 { transition-delay: 0.2s; }
+.reasons-section .reveal.reveal-delay-3 { transition-delay: 0.3s; }
+.reasons-section .reveal.reveal-delay-4 { transition-delay: 0.4s; }
+.reasons-section .reveal.reveal-delay-5 { transition-delay: 0.5s; }
+
+/* ---- Responsive ---- */
+
+@media (max-width: 1024px) {
+  .reasons-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .reasons-section {
+    padding: 4rem 1rem;
+  }
+
+  .reasons-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+    margin-top: 2.5rem;
+  }
+
+  .reason-card {
+    padding: 2rem 1.5rem;
+  }
+
+  .reason-emoji {
+    font-size: 2.4rem;
+  }
+
+  .reason-title {
+    font-size: 1.15rem;
+  }
+
+  .reason-description {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 520px) {
+  .reasons-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+    margin-top: 1.75rem;
+  }
+
+  .reason-card {
+    padding: 1.5rem 0.85rem;
+    border-radius: 16px;
+  }
+
+  .reason-emoji {
+    font-size: 2rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .reason-title {
+    font-size: 1.05rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .reason-description {
+    font-size: 0.85rem;
+    line-height: 1.5;
+  }
+}

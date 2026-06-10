@@ -1,0 +1,161 @@
+/* ============================================================
+   🃏 MemoryMatch — Find the Matching Pairs
+   ============================================================ */
+
+.memory-match {
+  text-align: center;
+  padding: 12px 0 0;
+}
+
+.memory-title {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  color: var(--blush);
+  margin-bottom: 16px;
+}
+
+/* ── Stats Row ── */
+.memory-stats {
+  display: flex;
+  justify-content: center;
+  gap: 28px;
+  margin-bottom: 20px;
+}
+
+.memory-stat {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  color: rgba(var(--cream-rgb), 0.8);
+}
+
+.memory-stat span {
+  color: var(--rose-gold);
+  font-weight: 600;
+}
+
+/* ── Card Grid ── */
+.memory-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  max-width: 440px;
+  margin: 0 auto;
+  perspective: 1000px;
+}
+
+/* ── Card ── */
+.memory-card {
+  aspect-ratio: 1;
+  cursor: pointer;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.5s var(--ease-out-back);
+}
+
+.memory-card.flipped {
+  transform: rotateY(180deg);
+}
+
+.memory-card.matched {
+  transform: rotateY(180deg);
+}
+
+.memory-card.matched .memory-card-front {
+  box-shadow: 0 0 20px rgba(var(--rose-gold-rgb), 0.4);
+  border-color: var(--rose-gold);
+}
+
+.memory-card-front,
+.memory-card-back {
+  position: absolute;
+  inset: 0;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border: 1px solid var(--glass-border);
+}
+
+/* Card front (emoji side) */
+.memory-card-front {
+  transform: rotateY(180deg);
+  background: rgba(var(--bg-surface-rgb), 0.7);
+  font-size: 2.2rem;
+}
+
+/* Card back (hidden side) */
+.memory-card-back {
+  background: linear-gradient(135deg, var(--rose-gold), var(--rose-dark));
+  position: relative;
+  overflow: hidden;
+}
+
+.memory-card-back::before {
+  content: '♥';
+  font-size: 1.6rem;
+  color: rgba(255, 255, 255, 0.15);
+}
+
+.memory-card-back::after {
+  content: '';
+  position: absolute;
+  inset: 3px;
+  border-radius: 11px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+/* ── Victory Screen ── */
+.memory-victory {
+  animation: fadeInUp 0.6s var(--ease-out-expo);
+  padding: 32px 0;
+}
+
+.memory-victory-emoji {
+  font-size: 4rem;
+  display: block;
+  margin-bottom: 16px;
+  animation: heartbeat 2s ease-in-out infinite;
+}
+
+.memory-victory-title {
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  color: var(--blush);
+  margin-bottom: 16px;
+}
+
+.memory-victory-stats {
+  font-family: var(--font-body);
+  font-size: 1.1rem;
+  color: rgba(var(--cream-rgb), 0.85);
+  margin-bottom: 8px;
+}
+
+.memory-victory-msg {
+  font-family: var(--font-body);
+  font-size: 1.15rem;
+  color: var(--rose-gold);
+  margin: 20px 0 28px;
+}
+
+/* ── Responsive ── */
+@media (max-width: 480px) {
+  .memory-grid {
+    gap: 8px;
+    max-width: 320px;
+  }
+
+  .memory-card-front {
+    font-size: 1.6rem;
+  }
+
+  .memory-card-back::before {
+    font-size: 1.2rem;
+  }
+
+  .memory-stats {
+    gap: 16px;
+  }
+}

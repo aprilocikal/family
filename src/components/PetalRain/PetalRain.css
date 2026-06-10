@@ -1,0 +1,16 @@
+/* ============================================================
+   🌸 PetalRain — Canvas Falling Petals
+   ============================================================ */
+
+.petal-rain {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: var(--z-petals);
+}
+
+.petal-rain__canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}

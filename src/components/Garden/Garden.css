@@ -1,0 +1,280 @@
+/* ============================================================
+   🌹 Garden — A Garden of Wishes
+   ============================================================ */
+
+.garden-section {
+  background: linear-gradient(
+    180deg,
+    var(--bg-deep) 0%,
+    rgba(42, 10, 30, 0.35) 50%,
+    var(--bg-deep) 100%
+  );
+  min-height: 80vh;
+}
+
+.garden-header {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+/* ── Bouquet Container ── */
+.garden-flowers {
+  position: relative;
+  height: 380px;
+  width: 100%;
+  max-width: 480px;
+  margin: 40px auto 20px;
+}
+
+/* ── Single Flower (Fanned) ── */
+.garden-flower {
+  position: absolute;
+  bottom: 120px; /* Convergence point */
+  left: 50%;
+  transform-origin: bottom center;
+  transform: translateX(-50%) rotate(var(--flower-angle)) translateY(calc(-1 * var(--flower-offset)));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 50px; /* Room for tooltip */
+  cursor: pointer;
+}
+
+/* Bloom Emoji */
+.garden-bloom {
+  font-size: clamp(2.8rem, 5vw, 3.8rem);
+  position: relative;
+  z-index: 2;
+  transition: transform 0.3s var(--ease-out-back),
+              filter 0.3s ease;
+  filter: drop-shadow(0 0 8px rgba(var(--rose-gold-rgb), 0.2));
+}
+
+.garden-flower:hover .garden-bloom {
+  transform: scale(1.2) translateY(-6px);
+  filter: drop-shadow(0 0 18px rgba(var(--rose-gold-rgb), 0.5));
+}
+
+.garden-flower:active .garden-bloom {
+  transform: scale(0.9);
+}
+
+/* Stem */
+.garden-stem {
+  width: 4px;
+  height: 0;
+  margin-top: 0;
+  background: linear-gradient(
+    to top,
+    #1b4d22 0%,
+    #2a5d31 50%,
+    #4a9e5c 100%
+  );
+  border-radius: 2px;
+  position: relative;
+  z-index: 1;
+  transition: height 1.2s var(--ease-out-expo) var(--flower-delay),
+              margin-top 1.2s var(--ease-out-expo) var(--flower-delay);
+  transform-origin: bottom center;
+}
+
+.garden-stem::before {
+  content: '🌿';
+  position: absolute;
+  font-size: 0.9rem;
+  left: 2px;
+  top: 40%;
+  opacity: 0;
+  transform: scale(0);
+  transition: opacity 0.4s ease 1s, transform 0.4s var(--ease-out-back) 1s;
+}
+
+.garden-stem.grown {
+  height: 164px;
+  margin-top: -24px;
+}
+
+.garden-stem.grown::before {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* ── Tooltip (Rotation Canceled to remain horizontal) ── */
+.garden-tooltip {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%) rotate(calc(-1 * var(--flower-angle))) translateY(8px);
+  min-width: 180px;
+  padding: 14px 18px;
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  box-shadow: var(--shadow-glow);
+  text-align: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s ease,
+              transform 0.35s var(--ease-out-back);
+  z-index: 10;
+}
+
+.garden-flower:hover .garden-tooltip {
+  opacity: 1;
+  transform: translateX(-50%) rotate(calc(-1 * var(--flower-angle))) translateY(-4px);
+}
+
+.garden-tooltip-name {
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--blush);
+  margin-bottom: 6px;
+}
+
+.garden-tooltip-message {
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  color: rgba(var(--cream-rgb), 0.75);
+  line-height: 1.4;
+  font-style: italic;
+}
+
+/* ── Petal Burst Particle ── */
+.garden-petal {
+  position: fixed;
+  pointer-events: none;
+  z-index: var(--z-overlay);
+  font-size: 1.2rem;
+  animation: petalBurst 0.8s var(--ease-out-expo) forwards;
+}
+
+@keyframes petalBurst {
+  0% {
+    opacity: 1;
+    transform: translate(0, 0) scale(1) rotate(0deg);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--px), var(--py)) scale(0.3) rotate(var(--pr));
+  }
+}
+
+/* ── Bottom Note ── */
+.garden-note {
+  text-align: center;
+  margin-top: 50px;
+  font-family: var(--font-accent);
+  font-size: clamp(0.85rem, 1.2vw, 1rem);
+  color: rgba(var(--cream-rgb), 0.45);
+  letter-spacing: 0.08em;
+  animation: float 4s ease-in-out infinite;
+}
+
+/* ── Bouquet Wrapper ── */
+.bouquet-wrapper {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 170px;
+  height: 155px;
+  pointer-events: none;
+  z-index: 5;
+  opacity: 0;
+  transition: opacity 0.8s ease 0.6s;
+}
+
+.bouquet-wrapper.visible {
+  opacity: 1;
+}
+
+/* Cone Wrapping Paper */
+.bouquet-paper {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(245, 126, 182, 0.22) 0%,
+    rgba(255, 209, 230, 0.08) 50%,
+    rgba(230, 194, 128, 0.15) 100%
+  );
+  border: 1px solid rgba(245, 126, 182, 0.35);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  clip-path: polygon(0% 0%, 100% 0%, 65% 100%, 35% 100%);
+  border-radius: 0 0 30px 30px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+/* Pink Ribbon Knot */
+.bouquet-ribbon {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%) scale(1);
+  font-size: 2.8rem;
+  z-index: 6;
+  animation: bouquet-heartbeat 2.5s infinite ease-in-out;
+  filter: drop-shadow(0 4px 12px rgba(245, 126, 182, 0.4));
+}
+
+@keyframes bouquet-heartbeat {
+  0%, 100% { transform: translateX(-50%) scale(1); }
+  50% { transform: translateX(-50%) scale(1.15); }
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .garden-flowers {
+    height: 350px;
+  }
+
+  .garden-flower {
+    bottom: 100px;
+  }
+
+  .garden-stem.grown {
+    height: 140px;
+    margin-top: -20px;
+  }
+
+  .bouquet-wrapper {
+    height: 130px;
+    width: 140px;
+  }
+}
+
+@media (max-width: 480px) {
+  .garden-flowers {
+    height: 320px;
+    max-width: 320px;
+    margin: 20px auto 10px;
+  }
+
+  .garden-flower {
+    bottom: 90px;
+    padding-top: 60px;
+  }
+
+  .garden-stem.grown {
+    height: 116px;
+    margin-top: -16px;
+  }
+
+  .bouquet-wrapper {
+    height: 110px;
+    width: 120px;
+  }
+
+  .garden-bloom {
+    font-size: 2.3rem;
+  }
+
+  .garden-tooltip {
+    min-width: 130px;
+    font-size: 0.8rem;
+  }
+}

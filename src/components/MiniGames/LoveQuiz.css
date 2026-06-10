@@ -1,0 +1,157 @@
+/* ============================================================
+   💕 LoveQuiz — How Well Do You Know Me?
+   ============================================================ */
+
+.love-quiz {
+  text-align: center;
+  padding: 12px 0 0;
+}
+
+.love-quiz-title {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  color: var(--blush);
+  margin-bottom: 24px;
+}
+
+/* ── Progress ── */
+.quiz-progress-wrapper {
+  margin-bottom: 24px;
+}
+
+.quiz-progress-text {
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  color: rgba(var(--cream-rgb), 0.7);
+  margin-bottom: 8px;
+}
+
+.quiz-progress-bar {
+  width: 100%;
+  height: 6px;
+  background: rgba(var(--bg-surface-rgb), 0.8);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.quiz-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--rose-gold), var(--blush), var(--gold-shimmer));
+  border-radius: 3px;
+  transition: width 0.5s var(--ease-out-expo);
+}
+
+/* ── Question ── */
+.quiz-question {
+  font-family: var(--font-display);
+  font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+  color: var(--cream);
+  margin-bottom: 28px;
+  line-height: 1.4;
+}
+
+/* ── Options ── */
+.quiz-options {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 420px;
+  margin: 0 auto;
+}
+
+.quiz-option {
+  padding: 14px 20px;
+  font-family: var(--font-body);
+  font-size: 1.05rem;
+  color: var(--cream);
+  background: rgba(var(--bg-surface-rgb), 0.6);
+  border: 1px solid rgba(var(--rose-gold-rgb), 0.2);
+  border-radius: 14px;
+  cursor: pointer;
+  transition: all var(--transition-base);
+  text-align: left;
+}
+
+.quiz-option:hover:not(.quiz-option-disabled) {
+  border-color: var(--rose-gold);
+  background: rgba(var(--rose-gold-rgb), 0.1);
+  transform: translateX(4px);
+}
+
+.quiz-option-disabled {
+  pointer-events: none;
+}
+
+.quiz-option.correct {
+  border-color: #6bcf7f;
+  background: rgba(107, 207, 127, 0.15);
+  box-shadow: 0 0 20px rgba(107, 207, 127, 0.2);
+}
+
+.quiz-option.wrong {
+  border-color: #cf6b6b;
+  background: rgba(207, 107, 107, 0.15);
+}
+
+/* ── Result Screen ── */
+.quiz-result {
+  animation: fadeInUp 0.6s var(--ease-out-expo);
+  padding: 20px 0;
+}
+
+.quiz-result-emoji {
+  font-size: 4rem;
+  display: block;
+  margin-bottom: 16px;
+  animation: heartbeat 2s ease-in-out infinite;
+}
+
+.quiz-result-score {
+  font-family: var(--font-display);
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--blush);
+  margin-bottom: 12px;
+}
+
+.quiz-result-message {
+  font-family: var(--font-body);
+  font-size: 1.15rem;
+  color: rgba(var(--cream-rgb), 0.9);
+  margin-bottom: 28px;
+  line-height: 1.6;
+}
+
+.quiz-restart {
+  margin-top: 8px;
+}
+
+/* ── Confetti ── */
+.quiz-confetti {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 200;
+  overflow: hidden;
+}
+
+.confetti-piece {
+  position: absolute;
+  top: -20px;
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  animation: confetti-fall linear forwards;
+  opacity: 0;
+}
+
+@media (max-width: 480px) {
+  .love-quiz-title {
+    font-size: 1.3rem;
+  }
+
+  .quiz-option {
+    padding: 12px 16px;
+    font-size: 0.95rem;
+  }
+}

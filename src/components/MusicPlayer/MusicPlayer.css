@@ -1,0 +1,171 @@
+/* ============================================================
+   🎵 MusicPlayer — Vinyl Record Player
+   ============================================================ */
+
+.music-player {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: var(--z-music);
+  display: flex;
+  align-items: center;
+  gap: 0;
+  transition: opacity 0.4s var(--ease-romantic);
+}
+
+.music-player--hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ── Vinyl Button ── */
+.music-player__btn {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  background: none;
+  padding: 0;
+  outline: none;
+  flex-shrink: 0;
+  transition: transform var(--transition-base);
+}
+
+.music-player__btn:hover {
+  transform: scale(1.08);
+}
+
+.music-player__btn:active {
+  transform: scale(0.96);
+}
+
+/* ── Vinyl Disc ── */
+.music-player__vinyl {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at center, var(--bg-deep) 8px, transparent 8px),
+    radial-gradient(circle at center, var(--rose-gold) 10px, transparent 10px),
+    repeating-radial-gradient(
+      circle at center,
+      transparent 12px,
+      rgba(var(--rose-gold-rgb), 0.08) 13px,
+      transparent 14px,
+      transparent 16px,
+      rgba(var(--rose-gold-rgb), 0.06) 17px,
+      transparent 18px
+    ),
+    radial-gradient(circle at center, #1a1a1a 0%, #0d0d0d 100%);
+  border: 2px solid rgba(var(--rose-gold-rgb), 0.35);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  transition: box-shadow var(--transition-base);
+}
+
+.music-player__vinyl--spinning {
+  animation: spin-slow 4s linear infinite;
+}
+
+.music-player__vinyl--paused {
+  animation: none;
+}
+
+/* Glow when playing */
+.music-player--playing .music-player__vinyl {
+  animation: spin-slow 4s linear infinite, pulse-glow 2s ease-in-out infinite;
+}
+
+/* Center hole highlight */
+.music-player__vinyl::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--rose-gold);
+  box-shadow: 0 0 6px rgba(var(--rose-gold-rgb), 0.5);
+}
+
+/* ── Song Info Pill ── */
+.music-player__info {
+  position: absolute;
+  right: 68px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  border-radius: 30px;
+  padding: 10px 20px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-50%) translateX(10px);
+  transition: opacity 0.3s var(--ease-romantic),
+              transform 0.3s var(--ease-romantic);
+}
+
+.music-player:hover .music-player__info {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(-50%) translateX(0);
+}
+
+.music-player__song {
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  color: var(--blush);
+  letter-spacing: 0.03em;
+}
+
+.music-player__artist {
+  font-family: var(--font-accent);
+  font-size: 0.7rem;
+  color: var(--rose-gold);
+  opacity: 0.8;
+  display: block;
+  margin-top: 2px;
+}
+
+/* ── Disabled State ── */
+.music-player--disabled .music-player__btn {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+.music-player--disabled .music-player__btn:hover {
+  transform: none;
+}
+
+/* ── Responsive ── */
+@media (max-width: 480px) {
+  .music-player {
+    right: 16px;
+    bottom: 16px;
+  }
+
+  .music-player__btn {
+    width: 50px;
+    height: 50px;
+  }
+
+  .music-player__vinyl {
+    width: 50px;
+    height: 50px;
+  }
+
+  .music-player__info {
+    right: 58px;
+    padding: 8px 14px;
+  }
+
+  .music-player__song {
+    font-size: 0.75rem;
+  }
+}

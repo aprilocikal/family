@@ -1,0 +1,128 @@
+/* ============================================================
+   💗 CatchHearts — Catch Falling Hearts!
+   ============================================================ */
+
+.catch-hearts {
+  text-align: center;
+  padding: 12px 0 0;
+}
+
+.catch-hearts-title {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  color: var(--blush);
+  margin-bottom: 16px;
+}
+
+/* ── Canvas Container ── */
+.catch-canvas-container {
+  position: relative;
+  width: 100%;
+  max-width: 640px;
+  margin: 0 auto;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid var(--glass-border);
+  background: rgba(var(--bg-deep-rgb), 0.6);
+}
+
+.catch-canvas {
+  display: block;
+  width: 100%;
+  height: 500px;
+  cursor: pointer;
+}
+
+/* ── HUD ── */
+.catch-hud {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 16px;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.catch-hud-item {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  color: var(--cream);
+  background: rgba(var(--bg-deep-rgb), 0.6);
+  backdrop-filter: blur(8px);
+  padding: 6px 14px;
+  border-radius: 20px;
+  border: 1px solid var(--glass-border);
+}
+
+.catch-hud-item span {
+  color: var(--rose-gold);
+  font-weight: 700;
+}
+
+/* ── Start / Game Over Overlay ── */
+.catch-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(var(--bg-deep-rgb), 0.85);
+  backdrop-filter: blur(6px);
+  z-index: 5;
+  animation: fadeIn 0.3s ease-out;
+  border-radius: 16px;
+  padding: 20px;
+}
+
+.catch-overlay-emoji {
+  font-size: 3.5rem;
+  margin-bottom: 16px;
+  animation: heartbeat 2s ease-in-out infinite;
+}
+
+.catch-overlay-title {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  color: var(--blush);
+  margin-bottom: 8px;
+}
+
+.catch-overlay-score {
+  font-family: var(--font-display);
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--rose-gold);
+  margin-bottom: 8px;
+}
+
+.catch-overlay-msg {
+  font-family: var(--font-body);
+  font-size: 1.1rem;
+  color: rgba(var(--cream-rgb), 0.85);
+  margin-bottom: 24px;
+  max-width: 280px;
+}
+
+.catch-overlay .btn-rose {
+  font-size: 1rem;
+}
+
+/* ── Responsive ── */
+@media (max-width: 480px) {
+  .catch-canvas {
+    height: 400px;
+  }
+
+  .catch-hud-item {
+    font-size: 0.9rem;
+    padding: 4px 10px;
+  }
+
+  .catch-overlay-title {
+    font-size: 1.3rem;
+  }
+}

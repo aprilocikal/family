@@ -1,0 +1,269 @@
+/* ============================================================
+   🌹 Hero — Full-screen Hero Section
+   ============================================================ */
+
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  overflow: hidden;
+  padding: 60px 24px;
+}
+
+/* Subtle gradient overlay */
+.hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 50% 30%, rgba(200, 116, 138, 0.06) 0%, transparent 60%),
+    radial-gradient(ellipse at 50% 100%, rgba(var(--bg-deep-rgb), 0.9) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ── Content wrapper ── */
+.hero-content {
+  position: relative;
+  z-index: var(--z-content);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  max-width: 800px;
+  will-change: transform;
+}
+
+/* ── Eyebrow ── */
+.hero .hero-eyebrow {
+  font-family: var(--font-accent);
+  font-size: clamp(0.9rem, 1.4vw, 1.15rem);
+  color: var(--rose-gold);
+  letter-spacing: 0.15em;
+  margin-bottom: 16px;
+  opacity: 0;
+  animation: heroFadeInUp 1s var(--ease-out-expo) 0.2s forwards;
+}
+
+/* ── Title ── */
+.hero-title {
+  font-family: var(--font-display);
+  font-size: clamp(2.8rem, 7vw, 5.5rem);
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--blush);
+  margin-bottom: 24px;
+  opacity: 0;
+  animation: heroFadeInUp 1s var(--ease-out-expo) 0.5s forwards;
+}
+
+.hero-title .hero-name {
+  display: block;
+  font-style: italic;
+  color: var(--rose-gold);
+  background: linear-gradient(
+    135deg,
+    var(--rose-gold),
+    var(--blush),
+    var(--gold-shimmer),
+    var(--rose-gold)
+  );
+  background-size: 300% 300%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation:
+    heroFadeInUp 1s var(--ease-out-expo) 0.5s forwards,
+    hero-name-shimmer 6s ease-in-out infinite 1.5s;
+}
+
+@keyframes hero-name-shimmer {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* ── Subtitle ── */
+.hero-subtitle {
+  font-family: var(--font-body);
+  font-size: clamp(1.05rem, 1.8vw, 1.35rem);
+  color: rgba(var(--cream-rgb), 0.75);
+  font-weight: 400;
+  max-width: 500px;
+  line-height: 1.6;
+  margin-bottom: 40px;
+  opacity: 0;
+  animation: heroFadeInUp 1s var(--ease-out-expo) 0.8s forwards;
+}
+
+/* ── Flower Decoration (SVG) ── */
+.hero-flower-wrap {
+  margin-bottom: 36px;
+  opacity: 0;
+  animation: heroScaleIn 1.2s var(--ease-out-back) 1.1s forwards;
+}
+
+.hero-flower {
+  width: clamp(60px, 8vw, 90px);
+  height: auto;
+  filter: drop-shadow(0 0 20px rgba(var(--rose-gold-rgb), 0.3));
+  animation: hero-flower-spin 20s linear infinite;
+}
+
+@keyframes hero-flower-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* ── Scroll Button ── */
+.hero-scroll-btn {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: var(--z-content);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  opacity: 0;
+  animation: heroFadeInUp 1s var(--ease-out-expo) 1.5s forwards;
+  transition: transform var(--transition-base);
+}
+
+.hero-scroll-btn:hover {
+  transform: translateX(-50%) translateY(-3px);
+}
+
+.hero-scroll-text {
+  font-family: var(--font-body);
+  font-size: clamp(0.8rem, 1vw, 0.95rem);
+  color: rgba(var(--cream-rgb), 0.5);
+  letter-spacing: 0.08em;
+  font-weight: 400;
+  transition: color var(--transition-base);
+}
+
+.hero-scroll-btn:hover .hero-scroll-text {
+  color: var(--rose-gold);
+}
+
+.hero-scroll-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid rgba(var(--rose-gold-rgb), 0.3);
+  color: var(--rose-gold);
+  font-size: 1.1rem;
+  animation: hero-arrow-bounce 2s ease-in-out infinite;
+  transition: border-color var(--transition-base), background var(--transition-base);
+}
+
+.hero-scroll-btn:hover .hero-scroll-arrow {
+  border-color: var(--rose-gold);
+  background: rgba(var(--rose-gold-rgb), 0.1);
+}
+
+@keyframes hero-arrow-bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(6px); }
+}
+
+/* ── Animations ── */
+@keyframes heroFadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(35px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes heroScaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.5) rotate(-30deg);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+/* ── Decorative side lines ── */
+.hero-deco-line {
+  position: absolute;
+  width: 1px;
+  height: 80px;
+  background: linear-gradient(to bottom, transparent, var(--rose-gold), transparent);
+  opacity: 0.2;
+  z-index: 2;
+}
+
+.hero-deco-line--left {
+  left: 10%;
+  top: 30%;
+  animation: hero-deco-fade 3s ease-in-out infinite;
+}
+
+.hero-deco-line--right {
+  right: 10%;
+  top: 40%;
+  animation: hero-deco-fade 3s ease-in-out infinite 1.5s;
+}
+
+@keyframes hero-deco-fade {
+  0%, 100% { opacity: 0.1; height: 60px; }
+  50% { opacity: 0.3; height: 100px; }
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .hero {
+    padding: 40px 20px;
+  }
+
+  .hero-scroll-btn {
+    bottom: 24px;
+  }
+
+  .hero-deco-line {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero {
+    padding: 30px 16px;
+    min-height: 100svh;
+  }
+
+  .hero-title {
+    font-size: clamp(2.2rem, 10vw, 3.5rem);
+    margin-bottom: 18px;
+  }
+
+  .hero-subtitle {
+    font-size: 1rem;
+    margin-bottom: 30px;
+  }
+
+  .hero-scroll-btn {
+    bottom: 20px;
+  }
+
+  .hero-scroll-text {
+    font-size: 0.78rem;
+  }
+}
