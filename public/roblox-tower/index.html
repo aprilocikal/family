@@ -1022,6 +1022,13 @@
       <div class="hud-left">
         <div class="hud-item stage" id="stage-display">Stage 1 / 10</div>
         <div class="hud-item height" id="height-display">↑ 0m</div>
+        <div class="hud-item health" id="health-display" style="color: #ff3d00; display: flex; align-items: center; gap: 8px;">
+          <span>❤️</span>
+          <div class="health-bar-bg" style="width: 70px; height: 10px; background: rgba(0,0,0,0.5); border-radius: 4px; overflow: hidden; border: 1px solid rgba(255,255,255,0.15);">
+            <div class="health-bar-fill" id="health-bar-fill" style="width: 100%; height: 100%; background: linear-gradient(90deg, #ff1744, #ff5252); transition: width 0.1s ease-out;"></div>
+          </div>
+          <span id="health-text">100</span>
+        </div>
       </div>
       <div class="hud-center">
         <div class="hud-item timer" id="timer-display">8:00</div>
@@ -1128,6 +1135,21 @@
     <button class="play-btn" id="replay-btn" style="margin-top:30px;">PLAY AGAIN</button>
   </div>
 
+  <!-- GAME OVER / TIME'S UP SCREEN -->
+  <div id="gameover-screen" style="position: fixed; inset: 0; display: none; flex-direction: column; align-items: center; justify-content: center; z-index: 100; background: radial-gradient(ellipse at center, rgba(255,82,82,0.15) 0%, rgba(15,23,42,0.9) 100%); backdrop-filter: blur(8px);">
+    <div class="win-title" style="background: linear-gradient(180deg, #ff5252, #ff1744); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 4px 15px rgba(255,23,68,0.4)); animation: winPulse 1s ease infinite alternate; font-family:'Fredoka One', cursive; font-size: clamp(38px, 6vw, 64px);">⏱️ TIME'S UP! ⏱️</div>
+    <div style="font-size: 20px; font-weight: 800; color: #ffd54f; margin-top: 15px; text-shadow: 0 2px 4px rgba(0,0,0,0.5);" id="go-winner-msg">Winner: ObbyMaster!</div>
+    
+    <div class="win-stats" id="go-stats" style="margin-top: 20px; text-align: center; font-size: 16px; line-height: 1.8; color: rgba(255,255,255,0.8); max-height: 200px; overflow-y: auto; background: rgba(0,0,0,0.3); padding: 15px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); width: 280px;">
+      <!-- Populated dynamically -->
+    </div>
+    
+    <div style="display: flex; gap: 15px; margin-top: 30px;">
+      <button class="play-btn" id="go-share-btn" style="background: linear-gradient(135deg, #25D366, #128C7E); color: white; padding: 12px 20px; font-size: 15px; border-radius: 10px; font-weight: 800; text-transform: uppercase; cursor: pointer; border: none; box-shadow: 0 4px 15px rgba(37,211,102,0.3); transition: transform 0.2s;">📲 SHARE STATUS</button>
+      <button class="play-btn" id="go-replay-btn" style="padding: 12px 20px; font-size: 15px; border-radius: 10px;">PLAY AGAIN</button>
+    </div>
+  </div>
+
   <!-- CHECKPOINT TOAST -->
   <div id="checkpoint-toast">✅ Checkpoint Reached!</div>
 
@@ -1183,10 +1205,10 @@
     ];
 
     const DIFF_SETTINGS = {
-      easy:    { platMin: 3.5, platMax: 5, gapVMin: 1.8, gapVMax: 3, angleStep: [25, 45], killChance: 0,    moveChance: 0.05, disappearChance: 0 },
-      medium:  { platMin: 2.8, platMax: 4, gapVMin: 2.2, gapVMax: 3.5, angleStep: [30, 55], killChance: 0.1, moveChance: 0.12, disappearChance: 0.08 },
-      hard:    { platMin: 2.2, platMax: 3.5, gapVMin: 2.5, gapVMax: 4, angleStep: [35, 65], killChance: 0.14, moveChance: 0.18, disappearChance: 0.12 },
-      extreme: { platMin: 1.8, platMax: 3, gapVMin: 3, gapVMax: 4.5, angleStep: [40, 75], killChance: 0.18, moveChance: 0.22, disappearChance: 0.15 }
+      easy:    { platMin: 6.0, platMax: 7.8, gapVMin: 0.7, gapVMax: 1.2, angleStep: [12, 16], killChance: 0.20, moveChance: 0.05, disappearChance: 0 },
+      medium:  { platMin: 5.5, platMax: 7.2, gapVMin: 0.9, gapVMax: 1.4, angleStep: [14, 18], killChance: 0.26, moveChance: 0.12, disappearChance: 0.08 },
+      hard:    { platMin: 5.0, platMax: 6.5, gapVMin: 1.1, gapVMax: 1.6, angleStep: [16, 20], killChance: 0.32, moveChance: 0.18, disappearChance: 0.12 },
+      extreme: { platMin: 4.5, platMax: 5.8, gapVMin: 1.3, gapVMax: 1.8, angleStep: [18, 22], killChance: 0.38, moveChance: 0.22, disappearChance: 0.15 }
     };
 
     const FAKE_PLAYERS = [
@@ -1281,6 +1303,10 @@
 
       playDeath() {
         this._osc('sawtooth', 220, 60, 0.35, 0.15);
+      }
+
+      playHit() {
+        this._osc('sawtooth', 180, 90, 0.15, 0.15);
       }
 
       playWin() {
@@ -1479,6 +1505,8 @@
         this.coins = 0;
         this.currentStage = 1;
         this.deaths = 0;
+        this.maxHealth = 100;
+        this.health = this.maxHealth;
 
         // Player
         this.playerGroup = null;
@@ -1668,6 +1696,16 @@
         document.getElementById('replay-btn').addEventListener('click', () => {
           this.playClickAudio();
           this.restart();
+        });
+
+        document.getElementById('go-replay-btn').addEventListener('click', () => {
+          this.playClickAudio();
+          this.restart();
+        });
+
+        document.getElementById('go-share-btn').addEventListener('click', () => {
+          this.playClickAudio();
+          this.shareLeaderboard();
         });
 
         document.getElementById('voice-btn').addEventListener('click', () => {
@@ -1992,21 +2030,26 @@
             const platD = rand(diff.platMin, diff.platMax);
 
             let type = 'static';
+            let spawnLaser = false;
             const roll = Math.random();
             if (roll < diff.killChance) {
-              type = 'kill';
+              spawnLaser = true;
             } else if (roll < diff.killChance + diff.moveChance) {
               type = 'moving';
             } else if (roll < diff.killChance + diff.moveChance + diff.disappearChance) {
               type = 'disappearing';
             }
 
-            const color = type === 'kill' ? 0xFF1744 : theme.colors[randInt(0, theme.colors.length - 1)];
-            const platH = type === 'kill' ? 0.35 : 0.6;
+            const color = theme.colors[randInt(0, theme.colors.length - 1)];
+            const platH = 0.6;
 
             this.createPlatform(px, currentHeight, pz, platW, platH, platD, color, type);
 
-            if (type !== 'kill' && Math.random() < 0.35) {
+            if (spawnLaser) {
+              this.createLaserOnPlatform(px, currentHeight, pz, platW, platH, platD, currentAngle);
+            }
+
+            if (!spawnLaser && Math.random() < 0.35) {
               this.createCoin(px, currentHeight + 2, pz);
             }
           }
@@ -2034,6 +2077,29 @@
         trophy.castShadow = true;
         this.scene.add(trophy);
         this.trophy = trophy;
+      }
+
+      createLaserOnPlatform(x, y, z, w, h, d, angle) {
+        const laserGeo = new THREE.BoxGeometry(w + 0.6, 0.15, 0.15);
+        const laserMat = new THREE.MeshStandardMaterial({
+          color: 0xff0000,
+          flatShading: true,
+          emissive: 0xff0000,
+          emissiveIntensity: 1.8,
+          transparent: true,
+          opacity: 0.85
+        });
+        const mesh = new THREE.Mesh(laserGeo, laserMat);
+        mesh.position.set(x, y + 0.9, z);
+        mesh.rotation.y = angle;
+        mesh.castShadow = true;
+        this.scene.add(mesh);
+
+        const laserData = {
+          mesh, w: w + 0.6, h: 0.15, d: 0.15, type: 'laser', angle,
+          basePos: new THREE.Vector3(x, y + 0.9, z)
+        };
+        this.killParts.push(laserData);
       }
 
       createPlatform(x, y, z, w, h, d, color, type) {
@@ -2905,6 +2971,8 @@
       restart() {
         document.getElementById('win-screen').style.display = 'none';
         document.getElementById('death-screen').style.display = 'none';
+        const goScreen = document.getElementById('gameover-screen');
+        if (goScreen) goScreen.style.display = 'none';
         document.getElementById('hud').style.display = 'block';
         this.showLeaderboard();
         document.getElementById('height-minimap').style.display = 'block';
@@ -2948,6 +3016,7 @@
         this.playerAngle = Math.PI;
         this.camAngleH = 0;
         this.camAngleV = 0.35;
+        this.health = this.maxHealth;
       }
 
       // ===================== PHYSICS & UPDATES =====================
@@ -2971,7 +3040,7 @@
         this.timeLeft -= dt;
         if (this.timeLeft <= 0) {
           this.timeLeft = 0;
-          this.die("Time's up!");
+          this.gameOver();
           return;
         }
 
@@ -3367,16 +3436,64 @@
             if (this.audioEnabled) this.audio.playCheckpoint();
             this.showCheckpointToast(cp.stageIndex);
             this.saveStats();
+            this.health = this.maxHealth;
           }
         }
       }
 
       checkKillCollisions() {
+        if (this.invincibleTimer > 0) return;
+
         for (const kp of this.killParts) {
-          const top = kp.mesh.position.y + kp.h / 2;
-          const bot = kp.mesh.position.y - kp.h / 2;
-          if (this.playerPos.y < top + 1.2 && this.playerPos.y > bot - 0.5 && this.isWithinPlatformXZ(kp)) {
-            this.die("Avoid the Red Lasers!");
+          let collided = false;
+          if (kp.type === 'laser') {
+            const cos = Math.cos(kp.angle);
+            const sin = Math.sin(kp.angle);
+            const halfL = kp.w / 2;
+            const ax = kp.basePos.x - halfL * cos;
+            const az = kp.basePos.z - halfL * sin;
+            const bx = kp.basePos.x + halfL * cos;
+            const bz = kp.basePos.z + halfL * sin;
+            
+            const px = this.playerPos.x;
+            const pz = this.playerPos.z;
+            const dx = bx - ax;
+            const dz = bz - az;
+            const l2 = dx * dx + dz * dz;
+            
+            let t = 0;
+            if (l2 > 0) {
+              t = ((px - ax) * dx + (pz - az) * dz) / l2;
+              t = Math.max(0, Math.min(1, t));
+            }
+            const projX = ax + t * dx;
+            const projZ = az + t * dz;
+            
+            const distXZ = Math.hypot(px - projX, pz - projZ);
+            const distY = Math.abs(this.playerPos.y - kp.basePos.y);
+            
+            if (distXZ < (CHAR_COLLISION_R + 0.2) && distY < 0.75) {
+              collided = true;
+            }
+          } else {
+            const top = kp.mesh.position.y + kp.h / 2;
+            const bot = kp.mesh.position.y - kp.h / 2;
+            if (this.playerPos.y < top + 1.2 && this.playerPos.y > bot - 0.5 && this.isWithinPlatformXZ(kp)) {
+              collided = true;
+            }
+          }
+
+          if (collided) {
+            this.health = Math.max(0, this.health - 25);
+            this.invincibleTimer = 0.8;
+            if (this.audioEnabled) {
+              if (this.audio.playHit) this.audio.playHit();
+              else this.audio.playDeath();
+            }
+            
+            if (this.health <= 0) {
+              this.die("Darah habis! Hindari laser!");
+            }
             return;
           }
         }
@@ -3437,6 +3554,116 @@
         document.getElementById('height-minimap').style.display = 'none';
       }
 
+      gameOver() {
+        if (this.state !== 'playing') return;
+        this.state = 'gameover';
+        this.audio.stopBgMusic();
+        if (this.audioEnabled) this.audio.playWin();
+
+        if (document.pointerLockElement) document.exitPointerLock();
+
+        const leaderboardData = this.getLeaderboardData();
+        const winner = leaderboardData[0];
+        
+        document.getElementById('go-winner-msg').textContent = winner.isYou 
+          ? `🎉 Winner: You! (Stage ${winner.stage}) 🎉`
+          : `🏆 Winner: ${winner.name}! (Stage ${winner.stage}) 🏆`;
+
+        const statsEl = document.getElementById('go-stats');
+        statsEl.innerHTML = leaderboardData.map((p, idx) => {
+          let medal = '';
+          if (idx === 0) medal = '🥇 ';
+          else if (idx === 1) medal = '🥈 ';
+          else if (idx === 2) medal = '🥉 ';
+          return `<div style="display:flex; justify-content:space-between; margin-bottom:6px; font-weight:${p.isYou ? '900' : 'normal'}; color:${p.isYou ? '#ffd54f' : '#fff'};">
+            <span>${medal}${idx + 1}. ${p.name}</span>
+            <span>Stage ${p.stage}</span>
+          </div>`;
+        }).join('');
+
+        document.getElementById('gameover-screen').style.display = 'flex';
+        document.getElementById('hud').style.display = 'none';
+        document.getElementById('leaderboard').style.display = 'none';
+        document.getElementById('height-minimap').style.display = 'none';
+      }
+
+      getLeaderboardData() {
+        let all = [];
+        if (this.isHost || this.isGuest) {
+          all.push({
+            name: this.username,
+            stage: this.currentStage,
+            height: Math.max(0, Math.floor(this.playerPos.y)),
+            isYou: true
+          });
+          for (const id in this.otherPlayers) {
+            all.push({
+              name: this.otherPlayers[id].name,
+              stage: this.otherPlayers[id].stage,
+              height: Math.max(0, Math.floor(this.otherPlayers[id].targetPos.y)),
+              isYou: false
+            });
+          }
+        } else {
+          all.push({
+            name: this.username || 'You',
+            stage: this.currentStage,
+            height: Math.max(0, Math.floor(this.playerPos.y)),
+            isYou: true
+          });
+          this.fakePlayers.forEach(p => {
+            all.push({
+              name: p.name,
+              stage: p.stage,
+              height: Math.round(p.stage * (TOTAL_HEIGHT / NUM_SECTIONS) - rand(0, 10)),
+              isYou: false
+            });
+          });
+        }
+        all.sort((a, b) => {
+          if (b.stage !== a.stage) return b.stage - a.stage;
+          return b.height - a.height;
+        });
+        return all;
+      }
+
+      shareLeaderboard() {
+        const leaderboardData = this.getLeaderboardData();
+        let shareText = `🏆 *Leaderboard Tower of Seasons* 🏆\n\n`;
+        leaderboardData.forEach((p, idx) => {
+          let medal = '•';
+          if (idx === 0) medal = '🥇';
+          else if (idx === 1) medal = '🥈';
+          else if (idx === 2) medal = '🥉';
+          shareText += `${medal} *${idx + 1}. ${p.name}* - Stage ${p.stage} (${p.height}m)\n`;
+        });
+        
+        let shareUrl = window.location.href;
+        try {
+          if (window.parent && window.parent.location) {
+            shareUrl = window.parent.location.href;
+          }
+        } catch (e) {
+          if (document.referrer) shareUrl = document.referrer;
+        }
+        
+        shareText += `\nMainkan gamenya di: ${shareUrl}`;
+
+        if (navigator.share) {
+          navigator.share({
+            title: 'Tower of Seasons Leaderboard',
+            text: shareText,
+            url: shareUrl
+          }).catch(err => {
+            const waUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(shareText)}`;
+            window.open(waUrl, '_blank');
+          });
+        } else {
+          const waUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(shareText)}`;
+          window.open(waUrl, '_blank');
+        }
+      }
+
       showCoinPopup() {
         const popup = document.createElement('div');
         popup.className = 'coin-popup';
@@ -3474,6 +3701,13 @@
         const ratio = clamp(this.playerPos.y / TOTAL_HEIGHT, 0, 1);
         document.getElementById('minimap-fill').style.height = `${ratio * 100}%`;
         document.getElementById('minimap-you').style.bottom = `${ratio * 100}%`;
+
+        const healthBarFill = document.getElementById('health-bar-fill');
+        const healthText = document.getElementById('health-text');
+        if (healthBarFill && healthText) {
+          healthBarFill.style.width = this.health + '%';
+          healthText.textContent = Math.round(this.health);
+        }
       }
 
       updateLeaderboard(dt) {
