@@ -2016,10 +2016,10 @@
           currentAngle = restAngle;
           currentHeight = restHeight;
 
+          const heightStep = 20 / (platCount + 1);
           for (let p = 0; p < platCount; p++) {
             const angleStep = rand(diff.angleStep[0], diff.angleStep[1]) * (Math.PI / 180);
             currentAngle += angleStep;
-            const heightStep = rand(diff.gapVMin, diff.gapVMax);
             currentHeight += heightStep;
 
             const radius = rand(5.5, 10.5);
@@ -2056,7 +2056,7 @@
 
           const cpAngle = currentAngle + rand(25, 40) * (Math.PI / 180);
           currentAngle = cpAngle;
-          currentHeight += rand(diff.gapVMin, diff.gapVMax);
+          currentHeight = sectionBase + 22;
           const cpR = rand(6, 9);
           const cpx = Math.cos(cpAngle) * cpR;
           const cpz = Math.sin(cpAngle) * cpR;
