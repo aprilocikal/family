@@ -10,6 +10,20 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
   <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
+  <!-- SVG Icon helpers -->
+  <style>
+    .ic { display:inline-flex; align-items:center; justify-content:center; pointer-events:none; }
+    .ic svg { width:1em; height:1em; stroke:currentColor; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+    .hud-btn .ic svg { width:18px; height:18px; }
+    .lobby-btn .ic svg, .play-btn .ic svg { width:15px; height:15px; margin-right:5px; }
+    @keyframes spin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+    .spin-anim { animation: spin 1s linear infinite; }
+    /* Mic active glow */
+    #voice-btn.mic-active { background:rgba(0,230,118,0.35) !important; border-color:#00e676 !important; color:#00e676; }
+    #voice-btn.mic-muted  { background:rgba(255,82,82,0.35) !important;  border-color:#ff5252 !important; color:#ff5252; }
+    /* Copy button flash */
+    #copy-code-btn.copied .copy-hint { color:#00e676; }
+  </style>
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; user-select: none; -webkit-user-select: none; }
     body, html {
@@ -303,20 +317,20 @@
     /* ============= HUD ============= */
     #hud {
       position: fixed; top: 0; left: 0; right: 0;
-      padding: 16px;
+      padding: 10px 12px;
       display: none;
       pointer-events: none; z-index: 50;
     }
     .hud-top {
       display: flex; justify-content: space-between; align-items: flex-start;
     }
-    .hud-left, .hud-center, .hud-right { display: flex; flex-direction: column; gap: 8px; }
+    .hud-left, .hud-center, .hud-right { display: flex; flex-direction: column; gap: 6px; }
     .hud-center { align-items: center; pointer-events: auto; }
     .hud-item {
       background: rgba(15, 23, 42, 0.75);
-      padding: 8px 16px;
-      border-radius: 10px;
-      font-size: 15px; font-weight: 700;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 13px; font-weight: 700;
       backdrop-filter: blur(8px);
       border: 1px solid rgba(255,255,255,0.15);
       white-space: nowrap;
@@ -325,25 +339,27 @@
     }
     .hud-item.stage { color: #00e5ff; }
     .hud-item.timer { 
-      font-size: 28px; font-weight: 900; color: #fff; letter-spacing: 1px;
+      font-size: 24px; font-weight: 900; color: #fff; letter-spacing: 1px;
       background: rgba(15, 23, 42, 0.85);
       text-shadow: 0 0 12px rgba(255,255,255,0.5), 0 2px 4px rgba(0,0,0,0.5);
+      padding: 5px 14px;
     }
     .hud-item.coins { color: #ffb700; }
-    .hud-item.height { color: #39ff14; font-size: 13px; }
+    .hud-item.height { color: #39ff14; font-size: 11px; }
     .hud-btn {
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 40px; height: 40px;
-      font-size: 20px;
-      border-radius: 10px;
+      width: 36px; height: 36px;
+      font-size: 18px;
+      border-radius: 8px;
       background: rgba(15, 23, 42, 0.75);
       border: 1px solid rgba(255,255,255,0.15);
       color: white;
       transition: all 0.2s;
       pointer-events: auto;
+      flex-shrink: 0;
     }
     #voice-btn {
       display: none; /* Hidden by default, shown in multiplayer */
@@ -395,44 +411,61 @@
 
     /* ============= LEADERBOARD ============= */
     #leaderboard {
-      position: fixed; top: 72px; right: 16px;
-      width: 220px;
-      background: rgba(15, 23, 42, 0.75);
-      border-radius: 12px;
-      padding: 12px;
+      position: fixed; top: 56px; right: 8px;
+      width: 190px;
+      background: rgba(15, 23, 42, 0.85);
+      border-radius: 10px;
+      padding: 8px 10px;
       z-index: 50;
       backdrop-filter: blur(8px);
       border: 1px solid rgba(255,255,255,0.15);
       display: none;
       animation: slideIn 0.3s ease;
+      max-height: 50vh;
+      overflow: hidden;
+    }
+    #leaderboard.lb-collapsed #lb-rows {
+      display: none;
     }
     .lb-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 10px;
-      padding-bottom: 8px;
+      margin-bottom: 6px;
+      padding-bottom: 6px;
       border-bottom: 1px solid rgba(255,255,255,0.1);
+      cursor: pointer;
+      user-select: none;
     }
     .lb-title {
-      font-size: 12px; font-weight: 800;
+      font-size: 11px; font-weight: 800;
       text-transform: uppercase;
       letter-spacing: 1.5px;
       color: rgba(255,255,255,0.6);
+      display: flex;
+      align-items: center;
+      gap: 5px;
     }
     .lb-close {
       cursor: pointer;
-      font-size: 16px;
+      font-size: 14px;
       color: rgba(255,255,255,0.6);
       background: none; border: none;
+      padding: 0;
+      line-height: 1;
+      flex-shrink: 0;
     }
     .lb-close:hover { color: #fff; }
+    #lb-rows {
+      overflow-y: auto;
+      max-height: calc(50vh - 40px);
+    }
     .lb-row {
       display: flex; justify-content: space-between; align-items: center;
-      padding: 6px 8px;
-      border-radius: 6px;
-      font-size: 13px; font-weight: 600;
-      margin-bottom: 3px;
+      padding: 5px 6px;
+      border-radius: 5px;
+      font-size: 11px; font-weight: 600;
+      margin-bottom: 2px;
     }
     .lb-row.is-you {
       background: rgba(0, 230, 118, 0.2);
@@ -440,7 +473,7 @@
       border: 1px solid rgba(0, 230, 118, 0.35);
     }
     .lb-row .lb-name { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .lb-row .lb-stage { font-weight: 800; margin-left: 8px; }
+    .lb-row .lb-stage { font-weight: 800; margin-left: 6px; font-size: 11px; }
 
     /* ============= ESCAPE / PAUSE MENU ============= */
     #pause-menu {
@@ -538,10 +571,10 @@
     }
     #joystick-zone {
       position: absolute;
-      left: 30px; bottom: 30px;
-      width: 140px; height: 140px;
+      left: 16px; bottom: 16px;
+      width: 110px; height: 110px;
       border-radius: 50%;
-      background: rgba(15, 23, 42, 0.35);
+      background: rgba(15, 23, 42, 0.4);
       border: 2px solid rgba(255, 255, 255, 0.3);
       pointer-events: auto;
       touch-action: none;
@@ -549,23 +582,23 @@
       backdrop-filter: blur(4px);
     }
     #joystick-handle {
-      width: 50px; height: 50px;
+      width: 40px; height: 40px;
       border-radius: 50%;
-      background: rgba(255, 255, 255, 0.7);
+      background: rgba(255, 255, 255, 0.75);
       box-shadow: 0 4px 10px rgba(0,0,0,0.3);
       transition: transform 0.05s ease;
     }
     #mobile-actions-zone {
       position: absolute;
-      right: 30px; bottom: 30px;
+      right: 16px; bottom: 16px;
       display: flex;
       flex-direction: column;
-      align-items: flex-end;
-      gap: 16px;
+      align-items: center;
+      gap: 10px;
       pointer-events: none;
     }
     .mobile-btn {
-      width: 70px; height: 70px;
+      width: 65px; height: 65px;
       border-radius: 50%;
       display: flex; align-items: center; justify-content: center;
       font-size: 12px; font-weight: 800;
@@ -581,12 +614,13 @@
     }
     #mobile-jump-btn {
       background: linear-gradient(135deg, rgba(0, 230, 118, 0.85), rgba(0, 150, 60, 0.85));
-      width: 80px; height: 80px;
-      font-size: 15px;
+      width: 75px; height: 75px;
+      font-size: 14px;
     }
     #mobile-sprint-btn {
       background: linear-gradient(135deg, rgba(255, 112, 67, 0.85), rgba(216, 67, 21, 0.85));
-      font-size: 11px;
+      font-size: 10px;
+      width: 56px; height: 56px;
     }
     #mobile-sprint-btn.active {
       border-color: #ff3d00;
@@ -721,92 +755,182 @@
     #height-minimap::before {
       content: '🏆';
       position: absolute;
-      top: -24px;
+      top: -20px;
       left: 50%;
       transform: translateX(-50%);
-      font-size: 14px;
+      font-size: 12px;
     }
     #height-minimap::after {
       content: '🏁';
       position: absolute;
-      bottom: -24px;
+      bottom: -20px;
       left: 50%;
       transform: translateX(-50%);
-      font-size: 14px;
+      font-size: 12px;
     }
 
-    /* MOBILE ADJUSTMENTS */
+    /* MOBILE ADJUSTMENTS — phones & tablets */
     @media (max-width: 960px) {
-      .hud-right {
-        margin-right: 46px !important;
+      /* HUD compact for mobile */
+      #hud {
+        padding: 8px 10px !important;
       }
-      
-      /* Joystick adjustments (Analog stick size) */
-      #joystick-zone {
-        width: 95px !important;
-        height: 95px !important;
-        left: 20px !important;
-        bottom: 20px !important;
+      .hud-top {
+        align-items: center !important;
       }
-      #joystick-handle {
-        width: 36px !important;
-        height: 36px !important;
+      .hud-left, .hud-right {
+        gap: 4px !important;
       }
-      
-      /* Mobile actions zone adjustments (sprint / jump buttons) */
-      #mobile-actions-zone {
-        right: 20px !important;
-        bottom: 20px !important;
-        gap: 10px !important;
-      }
-      .mobile-btn {
-        width: 60px !important;
-        height: 60px !important;
+      .hud-item {
         font-size: 11px !important;
+        padding: 4px 8px !important;
+        border-radius: 6px !important;
       }
-      #mobile-jump-btn {
-        width: 70px !important;
-        height: 70px !important;
-        font-size: 13px !important;
+      .hud-item.timer {
+        font-size: 18px !important;
+        padding: 4px 10px !important;
       }
-      #mobile-sprint-btn {
-        width: 55px !important;
-        height: 55px !important;
+      .hud-item.height {
         font-size: 10px !important;
       }
-      
-      /* Height Minimap adjustments */
-      #height-minimap {
-        left: 15px !important;
-        height: 150px !important;
+      .hud-btn {
+        width: 30px !important;
+        height: 30px !important;
+        font-size: 14px !important;
+        border-radius: 6px !important;
+      }
+      /* HUD right: no extra margin, row layout */
+      .hud-right {
+        flex-direction: row !important;
+        gap: 4px !important;
+        align-items: center !important;
+        margin-right: 0 !important;
       }
 
-      /* Leaderboard compact styling on mobile to prevent blocking jump button */
+      /* Joystick: smaller, safely positioned */
+      #joystick-zone {
+        width: 90px !important;
+        height: 90px !important;
+        left: 12px !important;
+        bottom: 12px !important;
+      }
+      #joystick-handle {
+        width: 32px !important;
+        height: 32px !important;
+      }
+
+      /* Mobile action buttons: fully visible on right */
+      #mobile-actions-zone {
+        right: 12px !important;
+        bottom: 12px !important;
+        gap: 8px !important;
+        align-items: center !important;
+      }
+      .mobile-btn {
+        width: 58px !important;
+        height: 58px !important;
+        font-size: 10px !important;
+      }
+      #mobile-jump-btn {
+        width: 68px !important;
+        height: 68px !important;
+        font-size: 12px !important;
+      }
+      #mobile-sprint-btn {
+        width: 50px !important;
+        height: 50px !important;
+        font-size: 9px !important;
+      }
+
+      /* Height Minimap: hidden on mobile to save space, show only minimap bar */
+      #height-minimap {
+        left: 8px !important;
+        top: auto !important;
+        bottom: 136px !important;
+        transform: none !important;
+        height: 120px !important;
+        width: 8px !important;
+      }
+      #height-minimap::before, #height-minimap::after {
+        display: none !important;
+      }
+
+      /* Leaderboard: collapsed by default on mobile, click header to expand */
       #leaderboard {
-        top: 60px !important;
-        right: 10px !important;
-        width: 170px !important;
-        max-height: 120px !important;
-        overflow-y: auto !important;
-        padding: 8px !important;
+        top: 52px !important;
+        right: 6px !important;
+        width: 155px !important;
+        max-height: 44px !important;
+        overflow: hidden !important;
+        padding: 6px 8px !important;
+        transition: max-height 0.25s ease !important;
+      }
+      #leaderboard.lb-expanded {
+        max-height: 45vh !important;
       }
       .lb-header {
-        margin-bottom: 6px !important;
-        padding-bottom: 4px !important;
+        margin-bottom: 0 !important;
+        padding-bottom: 0 !important;
+        border-bottom: none !important;
+      }
+      #leaderboard.lb-expanded .lb-header {
+        margin-bottom: 5px !important;
+        padding-bottom: 5px !important;
+        border-bottom: 1px solid rgba(255,255,255,0.1) !important;
+      }
+      #lb-rows {
+        display: none;
+        max-height: calc(45vh - 40px);
+      }
+      #leaderboard.lb-expanded #lb-rows {
+        display: block;
       }
       .lb-title {
         font-size: 10px !important;
       }
       .lb-row {
-        padding: 4px 6px !important;
-        font-size: 11px !important;
+        padding: 3px 5px !important;
+        font-size: 10px !important;
         margin-bottom: 2px !important;
+      }
+    }
+
+    /* Small/landscape phones */
+    @media (max-width: 600px) {
+      #leaderboard {
+        width: 140px !important;
+      }
+      .hud-item.stage {
+        display: none !important;
       }
     }
 
     @media (max-height: 520px) {
       #start-screen, #waiting-lobby, #pause-menu, #settings-modal {
         justify-content: flex-start !important;
+      }
+      #joystick-zone {
+        bottom: 8px !important;
+        left: 8px !important;
+        width: 80px !important;
+        height: 80px !important;
+      }
+      #mobile-actions-zone {
+        bottom: 8px !important;
+        right: 8px !important;
+      }
+      #mobile-jump-btn {
+        width: 60px !important;
+        height: 60px !important;
+        font-size: 11px !important;
+      }
+      #mobile-sprint-btn {
+        width: 46px !important;
+        height: 46px !important;
+      }
+      #height-minimap {
+        height: 80px !important;
+        bottom: 100px !important;
       }
     }
   </style>
@@ -836,14 +960,20 @@
       </div>
       
       <div class="lobby-actions" style="display:flex; flex-direction:column; gap:12px;">
-        <button class="play-btn" id="play-btn" style="font-size:16px; padding:12px; letter-spacing:1px;">▶ SOLO PLAY</button>
+        <button class="play-btn" id="play-btn" style="display:flex;align-items:center;justify-content:center;gap:8px;font-size:16px; padding:12px; letter-spacing:1px;">
+          <span class="ic"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3" fill="currentColor" stroke="none"/></svg></span> SOLO PLAY
+        </button>
         <div class="lobby-divider">MULTIPLAYER</div>
         
         <div class="lobby-multi-options">
-          <button class="lobby-btn" id="host-btn">🏠 Host Room</button>
+          <button class="lobby-btn" id="host-btn" style="display:flex;align-items:center;justify-content:center;gap:8px;">
+            <span class="ic"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span> Host Room
+          </button>
           <div class="join-group">
             <input type="number" id="room-input" placeholder="4-digit code" />
-            <button class="lobby-btn" id="join-btn">Join</button>
+            <button class="lobby-btn" id="join-btn" style="display:flex;align-items:center;justify-content:center;gap:6px;">
+              <span class="ic"><svg viewBox="0 0 24 24"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg></span> Join
+            </button>
           </div>
         </div>
       </div>
@@ -860,7 +990,10 @@
       
       <div class="code-container" id="copy-code-btn">
         <div class="code-val" id="lobby-code-display">0000</div>
-        <div class="copy-hint">Click to copy Room Code 📋</div>
+        <div class="copy-hint" style="display:flex;align-items:center;justify-content:center;gap:5px;">
+          <span class="ic" style="font-size:14px;"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></span>
+          <span id="copy-hint-text">Tap to copy Room Code</span>
+        </div>
       </div>
       
       <div class="players-list-box">
@@ -870,8 +1003,12 @@
         </div>
       </div>
       
-      <button class="play-btn" id="lobby-start-btn" style="display:none; font-size:16px; padding:12px;">Start Game</button>
-      <button class="lobby-btn" id="lobby-leave-btn" style="background:rgba(255,82,82,0.15); border-color:rgba(255,82,82,0.3); color:#ff5252;">Leave Lobby</button>
+      <button class="play-btn" id="lobby-start-btn" style="display:none; font-size:16px; padding:12px; display:none; align-items:center; justify-content:center; gap:8px;">
+        <span class="ic"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3" fill="currentColor" stroke="none"/></svg></span> Start Game
+      </button>
+      <button class="lobby-btn" id="lobby-leave-btn" style="display:flex;align-items:center;justify-content:center;gap:8px;background:rgba(255,82,82,0.15); border-color:rgba(255,82,82,0.3); color:#ff5252;">
+        <span class="ic"><svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></span> Leave Lobby
+      </button>
     </div>
   </div>
 
@@ -885,20 +1022,30 @@
       <div class="hud-center">
         <div class="hud-item timer" id="timer-display">8:00</div>
       </div>
-      <div class="hud-right" style="display:flex; flex-direction:row; gap:8px; align-items:center; margin-right:60px;">
+      <div class="hud-right" style="display:flex; flex-direction:row; gap:6px; align-items:center;">
         <div class="hud-item coins" id="coin-display">🪙 0</div>
-        <button class="hud-btn" id="voice-btn" title="Voice Chat">🎙️</button>
-        <button class="hud-btn" id="settings-btn" title="Settings">⚙️</button>
+        <!-- voice-btn: class mic-active=on, mic-muted=muted, default=off -->
+        <button class="hud-btn" id="voice-btn" title="Voice Chat">
+          <span class="ic" id="voice-icon">
+            <!-- mic icon -->
+            <svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+          </span>
+        </button>
+        <button class="hud-btn" id="settings-btn" title="Settings">
+          <span class="ic">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          </span>
+        </button>
       </div>
     </div>
   </div>
 
   <!-- LEADERBOARD -->
   <div id="leaderboard">
-    <div class="lb-header">
-      <div class="lb-title">Leaderboard</div>
-      <button class="lb-close" id="lb-toggle-btn">×</button>
-    </div>
+      <div class="lb-header" id="lb-header-toggle">
+        <div class="lb-title">🏆 Leaderboard</div>
+        <button class="lb-close" id="lb-toggle-btn" title="Toggle leaderboard">▼</button>
+      </div>
     <div id="lb-rows"></div>
   </div>
 
@@ -923,8 +1070,12 @@
   <div id="pause-menu">
     <div class="pause-panel glass-panel">
       <div class="pause-title">Paused</div>
-      <button class="play-btn" id="resume-btn" style="font-size:15px; padding:12px;">Resume</button>
-      <button class="lobby-btn" id="menu-btn" style="background:rgba(255,255,255,0.05);">Back to Menu</button>
+      <button class="play-btn" id="resume-btn" style="display:flex;align-items:center;justify-content:center;gap:8px;font-size:15px; padding:12px;">
+        <span class="ic"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3" fill="currentColor" stroke="none"/></svg></span> Resume
+      </button>
+      <button class="lobby-btn" id="menu-btn" style="display:flex;align-items:center;justify-content:center;gap:8px;background:rgba(255,255,255,0.05);">
+        <span class="ic"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span> Back to Menu
+      </button>
     </div>
   </div>
 
@@ -1532,20 +1683,49 @@
           document.getElementById('settings-modal').style.display = 'none';
         });
 
-        document.getElementById('lb-toggle-btn').addEventListener('click', () => {
+        // Leaderboard toggle — works both desktop and mobile
+        const lbEl = document.getElementById('leaderboard');
+        const lbRowsEl = document.getElementById('lb-rows');
+        const lbToggleBtn = document.getElementById('lb-toggle-btn');
+        const isMobile = () => window.innerWidth <= 960;
+
+        const toggleLeaderboard = () => {
           this.playClickAudio();
-          this.lbVisible = !this.lbVisible;
-          document.getElementById('lb-rows').style.display = this.lbVisible ? 'block' : 'none';
-          document.getElementById('lb-toggle-btn').textContent = this.lbVisible ? '×' : '+';
+          if (isMobile()) {
+            // On mobile: use expand/collapse class
+            lbEl.classList.toggle('lb-expanded');
+            lbToggleBtn.textContent = lbEl.classList.contains('lb-expanded') ? '▲' : '▼';
+          } else {
+            // On desktop: show/hide rows
+            this.lbVisible = !this.lbVisible;
+            lbRowsEl.style.display = this.lbVisible ? 'block' : 'none';
+            lbToggleBtn.textContent = this.lbVisible ? '▼' : '►';
+          }
+        };
+
+        lbToggleBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          toggleLeaderboard();
+        });
+        document.getElementById('lb-header-toggle').addEventListener('click', () => {
+          toggleLeaderboard();
         });
 
         document.getElementById('copy-code-btn').addEventListener('click', () => {
           this.playClickAudio();
           const code = document.getElementById('lobby-code-display').textContent;
+          const hintEl = document.getElementById('copy-hint-text');
+          const btn = document.getElementById('copy-code-btn');
           navigator.clipboard.writeText(code).then(() => {
-            const hint = document.querySelector('.copy-hint');
-            hint.textContent = 'Room Code Copied! ✅';
-            setTimeout(() => { hint.textContent = 'Click to copy Room Code 📋'; }, 2000);
+            btn.classList.add('copied');
+            hintEl.textContent = 'Copied!';
+            setTimeout(() => {
+              btn.classList.remove('copied');
+              hintEl.textContent = 'Tap to copy Room Code';
+            }, 2000);
+          }).catch(() => {
+            hintEl.textContent = 'Copy failed';
+            setTimeout(() => { hintEl.textContent = 'Tap to copy Room Code'; }, 2000);
           });
         });
 
@@ -2254,13 +2434,32 @@
         this.audio.startBgMusic();
         document.getElementById('start-screen').style.display = 'none';
         document.getElementById('hud').style.display = 'block';
-        document.getElementById('leaderboard').style.display = 'block';
+        this.showLeaderboard();
         document.getElementById('voice-btn').style.display = 'none';
         document.getElementById('height-minimap').style.display = 'block';
         document.getElementById('lock-prompt').style.display = 'block';
         this.state = 'playing';
         this.resetPlayer();
         this.canvas.requestPointerLock();
+      }
+
+      showLeaderboard() {
+        const lbEl = document.getElementById('leaderboard');
+        const lbRowsEl = document.getElementById('lb-rows');
+        const lbToggleBtn = document.getElementById('lb-toggle-btn');
+        lbEl.style.display = 'block';
+        const isMobile = window.innerWidth <= 960;
+        if (isMobile) {
+          // Start collapsed on mobile
+          lbEl.classList.remove('lb-expanded');
+          lbRowsEl.style.display = '';
+          lbToggleBtn.textContent = '▼';
+        } else {
+          // Start expanded on desktop
+          this.lbVisible = true;
+          lbRowsEl.style.display = 'block';
+          lbToggleBtn.textContent = '▼';
+        }
       }
 
       startHost() {
@@ -2272,7 +2471,16 @@
         this.myPeerId = `naylin-tower-${code}`;
 
         try {
-          this.peer = new Peer(this.myPeerId);
+          this.peer = new Peer(this.myPeerId, {
+            config: {
+              iceServers: [
+                { urls: 'stun:stun.l.google.com:19302' },
+                { urls: 'stun:stun1.l.google.com:19302' },
+                { urls: 'stun:stun2.l.google.com:19302' },
+                { urls: 'stun:stun.stunprotocol.org:3478' }
+              ]
+            }
+          });
           this.setupVoicePeerListeners();
         } catch (e) {
           msgEl.style.color = '#ff5252';
@@ -2333,7 +2541,16 @@
         msgEl.textContent = 'Joining room ' + code + '...';
 
         try {
-          this.peer = new Peer();
+          this.peer = new Peer(undefined, {
+            config: {
+              iceServers: [
+                { urls: 'stun:stun.l.google.com:19302' },
+                { urls: 'stun:stun1.l.google.com:19302' },
+                { urls: 'stun:stun2.l.google.com:19302' },
+                { urls: 'stun:stun.stunprotocol.org:3478' }
+              ]
+            }
+          });
           this.setupVoicePeerListeners();
         } catch (e) {
           msgEl.style.color = '#ff5252';
@@ -2435,7 +2652,7 @@
         this.audio.startBgMusic();
         document.getElementById('waiting-lobby').style.display = 'none';
         document.getElementById('hud').style.display = 'block';
-        document.getElementById('leaderboard').style.display = 'block';
+        this.showLeaderboard();
         document.getElementById('height-minimap').style.display = 'block';
         document.getElementById('lock-prompt').style.display = 'block';
 
@@ -2675,7 +2892,7 @@
         document.getElementById('win-screen').style.display = 'none';
         document.getElementById('death-screen').style.display = 'none';
         document.getElementById('hud').style.display = 'block';
-        document.getElementById('leaderboard').style.display = 'block';
+        this.showLeaderboard();
         document.getElementById('height-minimap').style.display = 'block';
 
         this.coinObjects.forEach(c => { c.collected = false; c.mesh.visible = true; });
@@ -3287,11 +3504,16 @@
         all.sort((a, b) => b.stage - a.stage);
 
         const rows = document.getElementById('lb-rows');
-        if (rows && this.lbVisible) {
+        const lbEl = document.getElementById('leaderboard');
+        const isExpanded = lbEl && (lbEl.classList.contains('lb-expanded') || window.innerWidth > 960);
+        const shouldShow = this.lbVisible || isExpanded;
+        if (rows && shouldShow) {
           rows.innerHTML = all.map(p => {
             let micIcon = '';
             if (p.voiceActive) {
-              micIcon = p.micEnabled ? ' 🎙️' : ' 🔇';
+              micIcon = p.micEnabled
+                ? ` <svg style="width:10px;height:10px;display:inline-block;vertical-align:middle;" viewBox="0 0 24 24" fill="none" stroke="#00e676" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>`
+                : ` <svg style="width:10px;height:10px;display:inline-block;vertical-align:middle;" viewBox="0 0 24 24" fill="none" stroke="#ff5252" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="1" y1="1" x2="23" y2="23"/><path d="M9 9v3a3 3 0 0 0 5.12 2.12M15 9.34V4a3 3 0 0 0-5.94-.6"/><path d="M17 16.95A7 7 0 0 1 5 12v-2m14 0v2a7 7 0 0 1-.11 1.23"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>`;
             }
             return `<div class="lb-row ${p.isYou ? 'is-you' : ''}">
               <span class="lb-name">${p.name}${micIcon}</span>
@@ -3333,42 +3555,68 @@
       }
 
       // ===================== VOICE CHAT =====================
+      // SVG icon strings
+      _svgMic() {
+        return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>`;
+      }
+      _svgMicOff() {
+        return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="1" y1="1" x2="23" y2="23"/><path d="M9 9v3a3 3 0 0 0 5.12 2.12M15 9.34V4a3 3 0 0 0-5.94-.6"/><path d="M17 16.95A7 7 0 0 1 5 12v-2m14 0v2a7 7 0 0 1-.11 1.23"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>`;
+      }
+      _svgSpin() {
+        return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="spin-anim"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>`;
+      }
+      _svgError() {
+        return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>`;
+      }
+
+      setVoiceIcon(state) {
+        // state: 'off' | 'connecting' | 'on' | 'muted' | 'error'
+        const btn = document.getElementById('voice-btn');
+        const icon = document.getElementById('voice-icon');
+        if (!btn || !icon) return;
+        btn.classList.remove('mic-active', 'mic-muted');
+        btn.style.background = '';
+        btn.style.borderColor = '';
+        if (state === 'off') {
+          icon.innerHTML = this._svgMic();
+        } else if (state === 'connecting') {
+          icon.innerHTML = this._svgSpin();
+        } else if (state === 'on') {
+          icon.innerHTML = this._svgMic();
+          btn.classList.add('mic-active');
+        } else if (state === 'muted') {
+          icon.innerHTML = this._svgMicOff();
+          btn.classList.add('mic-muted');
+        } else if (state === 'error') {
+          icon.innerHTML = this._svgError();
+          btn.style.background = 'rgba(255,82,82,0.35)';
+        }
+      }
+
       async toggleVoiceChat() {
-        const micBtn = document.getElementById('voice-btn');
         if (this.voiceActive) {
-          // If already active, toggle mute/unmute
+          // Toggle mute/unmute
           this.micEnabled = !this.micEnabled;
           if (this.localStream) {
             this.localStream.getAudioTracks().forEach(track => {
               track.enabled = this.micEnabled;
             });
           }
-          micBtn.innerHTML = this.micEnabled ? '🎙️' : '🔇';
-          micBtn.style.background = this.micEnabled ? 'rgba(0, 230, 118, 0.35)' : 'rgba(255, 82, 82, 0.35)';
-          micBtn.style.borderColor = this.micEnabled ? '#00e676' : '#ff5252';
+          this.setVoiceIcon(this.micEnabled ? 'on' : 'muted');
         } else {
           // Join voice chat
-          micBtn.innerHTML = '⏳';
+          this.setVoiceIcon('connecting');
           try {
             this.localStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
             this.voiceActive = true;
             this.micEnabled = true;
-            
-            micBtn.innerHTML = '🎙️';
-            micBtn.style.background = 'rgba(0, 230, 118, 0.35)';
-            micBtn.style.borderColor = '#00e676';
-            
-            // Call existing players
-            this.callExistingVoicePeers();
+            this.setVoiceIcon('on');
+            // Call existing players after a short delay to let connections stabilize
+            setTimeout(() => this.callExistingVoicePeers(), 500);
           } catch (e) {
-            console.error("Microphone access denied:", e);
-            micBtn.innerHTML = '❌';
-            micBtn.style.background = 'rgba(255, 82, 82, 0.35)';
-            setTimeout(() => {
-              micBtn.innerHTML = '🎙️';
-              micBtn.style.background = '';
-              micBtn.style.borderColor = '';
-            }, 2000);
+            console.error('Microphone access denied:', e);
+            this.setVoiceIcon('error');
+            setTimeout(() => this.setVoiceIcon('off'), 2500);
           }
         }
       }
@@ -3423,7 +3671,8 @@
       setupVoicePeerListeners() {
         if (!this.peer) return;
         this.peer.on('call', (call) => {
-          console.log("Receiving voice call from:", call.peer);
+          console.log('Receiving voice call from:', call.peer);
+          // Answer with our local stream if we have one, otherwise with silence
           call.answer(this.localStream || undefined);
           this.voiceCalls[call.peer] = call;
           
@@ -3432,6 +3681,11 @@
           });
           
           call.on('close', () => {
+            this.removeRemoteVoice(call.peer);
+          });
+
+          call.on('error', (err) => {
+            console.error('Voice call error:', err);
             this.removeRemoteVoice(call.peer);
           });
         });
@@ -3475,13 +3729,7 @@
         this.voiceCalls = {};
         this.voiceActive = false;
         this.micEnabled = false;
-
-        const micBtn = document.getElementById('voice-btn');
-        if (micBtn) {
-          micBtn.innerHTML = '🎙️';
-          micBtn.style.background = '';
-          micBtn.style.borderColor = '';
-        }
+        this.setVoiceIcon('off');
       }
 
       // ===================== CORE GAME LOOP =====================
