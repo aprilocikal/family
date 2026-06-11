@@ -324,7 +324,11 @@
     .hud-top {
       display: flex; justify-content: space-between; align-items: flex-start;
     }
-    .hud-left, .hud-center, .hud-right { display: flex; flex-direction: column; gap: 6px; }
+    .hud-left { display: flex; flex-direction: column; gap: 6px; margin-left: 50px; }
+    .hud-center, .hud-right { display: flex; flex-direction: column; gap: 6px; }
+    @media (max-width: 960px) {
+      .hud-left { margin-left: 42px; }
+    }
     .hud-center { align-items: center; pointer-events: auto; }
     .hud-item {
       background: rgba(15, 23, 42, 0.75);
@@ -2511,9 +2515,12 @@
               this.updateLobbyPlayersUI();
               this.broadcastLobbyUpdate();
               
-              if (this.voiceActive) {
+              // Only call if host mic is active and guest mic is NOT active (guest calls us if active)
+              if (this.voiceActive && !data.voiceActive) {
                 setTimeout(() => { this.callPeer(conn.peer); }, 1000);
               }
+            } else if (data.type === 'voice_ready') {
+              console.log('Peer voice_ready (Host side, guest will call us):', conn.peer);
             } else if (data.type === 'update') {
               this.handleNetworkPlayerUpdate(conn.peer, data);
             }
@@ -2578,7 +2585,8 @@
             conn.send({
               type: 'join_lobby',
               name: this.username,
-              color: this.playerColor
+              color: this.playerColor,
+              voiceActive: this.voiceActive
             });
 
             if (this.voiceActive) {
@@ -2594,6 +2602,12 @@
               this.clientStartGame();
             } else if (data.type === 'sync') {
               this.handleNetworkSync(data.players);
+            } else if (data.type === 'voice_ready') {
+              // Host turned on their mic — call them if we also have a stream
+              console.log('Host voice_ready:', conn.peer);
+              if (this.voiceActive && this.localStream) {
+                setTimeout(() => { this.callPeer(conn.peer); }, 300);
+              }
             }
           });
 
@@ -3569,6 +3583,23 @@
         return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>`;
       }
 
+      getSilentStream() {
+        try {
+          const AudioContext = window.AudioContext || window.webkitAudioContext;
+          const ctx = new AudioContext();
+          const dst = ctx.createMediaStreamDestination();
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          gain.gain.value = 0;
+          osc.connect(gain);
+          gain.connect(dst);
+          osc.start();
+          return dst.stream;
+        } catch (e) {
+          return null;
+        }
+      }
+
       setVoiceIcon(state) {
         // state: 'off' | 'connecting' | 'on' | 'muted' | 'error'
         const btn = document.getElementById('voice-btn');
@@ -3624,21 +3655,26 @@
       callExistingVoicePeers() {
         if (!this.localStream) return;
         
-        // If host, call all connections
+        // If host, notify they are ready and call only if guest's mic is not active
         if (this.isHost) {
           this.connections.forEach(conn => {
-            if (conn.open && !this.voiceCalls[conn.peer]) {
-              this.callPeer(conn.peer);
+            if (conn.open) {
+              const guestPlayer = this.otherPlayers[conn.peer];
+              const guestVoiceActive = guestPlayer ? guestPlayer.voiceActive : false;
+              if (!guestVoiceActive) {
+                this.callPeer(conn.peer);
+              } else {
+                conn.send({ type: 'voice_ready' });
+              }
             }
           });
         }
         
-        // If guest, call the host
+        // If guest, call the host AND notify via data channel
         if (this.isGuest && this.conn && this.conn.open) {
+          this.conn.send({ type: 'voice_ready' });
           const hostPeerId = this.conn.peer;
-          if (!this.voiceCalls[hostPeerId]) {
-            this.callPeer(hostPeerId);
-          }
+          this.callPeer(hostPeerId);
         }
       }
 
@@ -3647,46 +3683,79 @@
         
         // Close existing call if any
         if (this.voiceCalls[peerId]) {
-          try { this.voiceCalls[peerId].close(); } catch(e){}
+          const oldCall = this.voiceCalls[peerId];
+          oldCall.off('close');
+          oldCall.off('stream');
+          oldCall.off('error');
+          try { oldCall.close(); } catch(e){}
+          delete this.voiceCalls[peerId];
         }
         
-        console.log("Calling peer for voice:", peerId);
-        const call = this.peer.call(peerId, this.localStream);
-        this.voiceCalls[peerId] = call;
-        
-        call.on('stream', (remoteStream) => {
-          this.playRemoteVoice(peerId, remoteStream);
-        });
-        
-        call.on('close', () => {
-          this.removeRemoteVoice(peerId);
-        });
-        
-        call.on('error', (err) => {
-          console.error("Voice call error with peer:", peerId, err);
-          this.removeRemoteVoice(peerId);
-        });
+        console.log('Calling peer for voice:', peerId);
+        try {
+          const call = this.peer.call(peerId, this.localStream);
+          if (!call) {
+            console.error('peer.call returned null for:', peerId);
+            return;
+          }
+          this.voiceCalls[peerId] = call;
+          
+          call.on('stream', (remoteStream) => {
+            console.log('Got stream from called peer:', peerId);
+            this.playRemoteVoice(peerId, remoteStream);
+          });
+          
+          call.on('close', () => {
+            if (this.voiceCalls[peerId] === call) {
+              this.removeRemoteVoice(peerId);
+            }
+          });
+          
+          call.on('error', (err) => {
+            console.error('Voice call error with peer:', peerId, err);
+            if (this.voiceCalls[peerId] === call) {
+              this.removeRemoteVoice(peerId);
+            }
+          });
+        } catch(e) {
+          console.error('Failed to call peer:', peerId, e);
+        }
       }
 
       setupVoicePeerListeners() {
         if (!this.peer) return;
         this.peer.on('call', (call) => {
           console.log('Receiving voice call from:', call.peer);
-          // Answer with our local stream if we have one, otherwise with silence
-          call.answer(this.localStream || undefined);
+          
+          // If we had an old call from this peer, clean it up before answering
+          if (this.voiceCalls[call.peer]) {
+            const oldCall = this.voiceCalls[call.peer];
+            oldCall.off('close');
+            oldCall.off('stream');
+            oldCall.off('error');
+            try { oldCall.close(); } catch(e){}
+          }
           this.voiceCalls[call.peer] = call;
           
+          // Always answer — with our stream if we have one, or a silent stream/undefined if not yet
+          call.answer(this.localStream || this.getSilentStream() || undefined);
+          
           call.on('stream', (remoteStream) => {
+            console.log('Got remote stream from:', call.peer);
             this.playRemoteVoice(call.peer, remoteStream);
           });
           
           call.on('close', () => {
-            this.removeRemoteVoice(call.peer);
+            if (this.voiceCalls[call.peer] === call) {
+              this.removeRemoteVoice(call.peer);
+            }
           });
-
+ 
           call.on('error', (err) => {
             console.error('Voice call error:', err);
-            this.removeRemoteVoice(call.peer);
+            if (this.voiceCalls[call.peer] === call) {
+              this.removeRemoteVoice(call.peer);
+            }
           });
         });
       }
@@ -3694,15 +3763,40 @@
       playRemoteVoice(peerId, remoteStream) {
         this.removeRemoteVoice(peerId);
         
-        console.log("Playing remote voice for:", peerId);
+        // Verify the stream has audio tracks
+        const audioTracks = remoteStream.getAudioTracks();
+        console.log(`Playing remote voice for ${peerId}, audio tracks: ${audioTracks.length}, enabled: ${audioTracks.map(t => t.enabled)}`);
+        if (audioTracks.length === 0) {
+          console.warn('Remote stream has no audio tracks!');
+          return;
+        }
+        
         const audio = document.createElement('audio');
         audio.id = `voice-audio-${peerId}`;
         audio.srcObject = remoteStream;
         audio.autoplay = true;
         audio.playsInline = true;
+        audio.muted = false;
+        audio.volume = 1.0;
         audio.style.display = 'none';
         
         document.body.appendChild(audio);
+        
+        // Force play (some browsers block autoplay)
+        const playPromise = audio.play();
+        if (playPromise) {
+          playPromise.catch((e) => {
+            console.warn('Audio autoplay blocked, retrying on next user gesture:', e);
+            const tryPlay = () => {
+              audio.play().then(() => {
+                document.removeEventListener('touchstart', tryPlay);
+                document.removeEventListener('click', tryPlay);
+              }).catch(() => {});
+            };
+            document.addEventListener('touchstart', tryPlay, { once: true });
+            document.addEventListener('click', tryPlay, { once: true });
+          });
+        }
       }
 
       removeRemoteVoice(peerId) {
