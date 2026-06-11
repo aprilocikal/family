@@ -67,17 +67,23 @@ export default function GameSection() {
     };
   }, [activeGame]);
 
-  // Handle game-to-parent music coordination (pause Iris when game plays)
+  // Handle game-to-parent music coordination (pause Iris when any game starts, resume on close)
   useEffect(() => {
     if (!activeGame) return;
 
+    const audioEl = document.querySelector('.music-player audio');
+    let wasPlaying = false;
+
+    if (audioEl && !audioEl.paused) {
+      audioEl.pause();
+      wasPlaying = true;
+    }
+
     const handleMessage = (e) => {
       if (e.data && e.data.type === 'naylin-game-music' && e.data.action === 'pause') {
-        // Pause Iris music
-        const audioEl = document.querySelector('.music-player audio');
         if (audioEl && !audioEl.paused) {
           audioEl.pause();
-          window.__naylinMusicWasPaused = true;
+          wasPlaying = true;
         }
       }
     };
@@ -85,13 +91,8 @@ export default function GameSection() {
 
     return () => {
       window.removeEventListener('message', handleMessage);
-      // Resume Iris when game closes
-      if (window.__naylinMusicWasPaused) {
-        const audioEl = document.querySelector('.music-player audio');
-        if (audioEl) {
-          audioEl.play().catch(() => {});
-        }
-        window.__naylinMusicWasPaused = false;
+      if (wasPlaying && audioEl) {
+        audioEl.play().catch(() => {});
       }
     };
   }, [activeGame]);
@@ -149,7 +150,7 @@ export default function GameSection() {
       {/* Modal */}
       {activeGame && ActiveComponent && (
         <div
-          className="game-modal-overlay"
+          className={`game-modal-overlay ${activeGame === 'roblox-obby-3d' ? 'tower-3d-overlay' : ''}`}
           onClick={(e) => {
             if (e.target === e.currentTarget) handleClose();
           }}

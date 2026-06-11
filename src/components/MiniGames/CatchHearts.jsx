@@ -17,6 +17,8 @@ function getResultMessage(score) {
   return { emoji: '💖', text: 'Every bit of love counts! 💖' };
 }
 
+import { sfx } from '../../utils/sfx';
+
 export default function CatchHearts() {
   const canvasRef = useRef(null);
   const [gameState, setGameState] = useState('idle'); // idle | playing | over
@@ -87,10 +89,17 @@ export default function CatchHearts() {
         if (dist < h.size * 1.2) {
           scoreRef.current = Math.max(0, scoreRef.current + h.points);
           setScore(scoreRef.current);
-          if (h.emoji === BOMB) {
-            setIsShaking(true);
-            setTimeout(() => setIsShaking(false), 400);
+          
+          if (h.points > 0) {
+            sfx.heartCatch();
+          } else {
+            sfx.incorrect();
+            if (h.emoji === BOMB) {
+              setIsShaking(true);
+              setTimeout(() => setIsShaking(false), 400);
+            }
           }
+          
           heartsRef.current.splice(i, 1);
           break;
         }
@@ -101,6 +110,7 @@ export default function CatchHearts() {
 
   // Game loop
   const startGame = useCallback(() => {
+    sfx.click();
     heartsRef.current = [];
     scoreRef.current = 0;
     timeRef.current = GAME_DURATION;
@@ -136,6 +146,7 @@ export default function CatchHearts() {
         clearInterval(timerRef.current);
         cancelAnimationFrame(animRef.current);
         setGameState('over');
+        sfx.victory();
       }
     }, 1000);
 

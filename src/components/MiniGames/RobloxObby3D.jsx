@@ -8,7 +8,7 @@ export default function RobloxObby3D() {
         src="/roblox-tower/index.html"
         title="Tower of Challenge 3D"
         className="roblox-obby-3d-iframe"
-        allow="autoplay; fullscreen; pointer-lock"
+        allow="autoplay; fullscreen; pointer-lock; microphone"
       />
     </div>
   );

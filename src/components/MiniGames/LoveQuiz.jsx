@@ -132,6 +132,8 @@ function Confetti() {
   );
 }
 
+import { sfx } from '../../utils/sfx';
+
 export default function LoveQuiz() {
   const [questions, setQuestions] = useState(() => {
     const shuffled = [...QUESTION_BANK].sort(() => 0.5 - Math.random());
@@ -150,7 +152,12 @@ export default function LoveQuiz() {
 
       const isCorrect = index === questions[currentQ].correct;
       const newScore = isCorrect ? score + 1 : score;
-      if (isCorrect) setScore(newScore);
+      if (isCorrect) {
+        setScore(newScore);
+        sfx.correct();
+      } else {
+        sfx.incorrect();
+      }
 
       // Auto-advance after 1 second
       setTimeout(() => {
@@ -159,7 +166,14 @@ export default function LoveQuiz() {
           setSelected(null);
         } else {
           setFinished(true);
-          if (newScore === 5) setShowConfetti(true);
+          if (newScore === 5) {
+            setShowConfetti(true);
+            sfx.victory();
+          } else if (newScore >= 3) {
+            sfx.correct();
+          } else {
+            sfx.incorrect();
+          }
         }
       }, 1000);
     },
@@ -167,6 +181,7 @@ export default function LoveQuiz() {
   );
 
   const restart = () => {
+    sfx.click();
     const shuffled = [...QUESTION_BANK].sort(() => 0.5 - Math.random());
     setQuestions(shuffled.slice(0, 5));
     setCurrentQ(0);

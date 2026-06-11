@@ -31,6 +31,8 @@ function createDeck() {
   return shuffleArray(pairs);
 }
 
+import { sfx } from '../../utils/sfx';
+
 export default function MemoryMatch() {
   const [cards, setCards] = useState(() => createDeck());
   const [flipped, setFlipped] = useState([]);
@@ -58,6 +60,9 @@ export default function MemoryMatch() {
       if (matched.includes(card.pairId)) return;
       if (flipped.length >= 2) return;
 
+      // Play card click/flip sound
+      sfx.click();
+
       const nextFlipped = [...flipped, cardId];
       setFlipped(nextFlipped);
 
@@ -75,14 +80,17 @@ export default function MemoryMatch() {
           setMatched(newMatched);
           setFlipped([]);
           setIsChecking(false);
+          sfx.match();
 
           // Check win
           if (newMatched.length === CARD_ICONS.length) {
             setGameWon(true);
             clearInterval(timerRef.current);
+            sfx.victory();
           }
         } else {
           // No match — flip back after 1s
+          sfx.incorrect();
           setTimeout(() => {
             setFlipped([]);
             setIsChecking(false);
@@ -94,6 +102,7 @@ export default function MemoryMatch() {
   );
 
   const restart = () => {
+    sfx.click();
     setCards(createDeck());
     setFlipped([]);
     setMatched([]);
