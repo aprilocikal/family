@@ -7,6 +7,7 @@ import './CatchHearts.css';
 const GOOD_HEARTS = ['💗', '💖', '💕'];
 const BAD_HEART = '💔';
 const POWER_UP = '🌹';
+const BOMB = '💣';
 const GAME_DURATION = 30;
 const SPAWN_INTERVAL_MS = 800;
 
@@ -16,11 +17,12 @@ function getResultMessage(score) {
   return { emoji: '💖', text: 'Every bit of love counts! 💖' };
 }
 
-export default function CatchHearts({ onClose }) {
+export default function CatchHearts() {
   const canvasRef = useRef(null);
   const [gameState, setGameState] = useState('idle'); // idle | playing | over
   const [score, setScore] = useState(0);
   const [timeLeft, setTimeLeft] = useState(GAME_DURATION);
+  const [isShaking, setIsShaking] = useState(false);
 
   // Refs for the game loop
   const heartsRef = useRef([]);
@@ -42,7 +44,10 @@ export default function CatchHearts({ onClose }) {
     if (rand < 0.08) {
       emoji = POWER_UP;
       points = 3;
-    } else if (rand < 0.23) {
+    } else if (rand < 0.18) {
+      emoji = BOMB;
+      points = -3;
+    } else if (rand < 0.33) {
       emoji = BAD_HEART;
       points = -1;
     } else {
@@ -71,10 +76,9 @@ export default function CatchHearts({ onClose }) {
       if (!canvas) return;
 
       const rect = canvas.getBoundingClientRect();
-      const scaleX = canvas.width / rect.width;
-      const scaleY = canvas.height / rect.height;
-      const clickX = (e.clientX - rect.left) * scaleX;
-      const clickY = (e.clientY - rect.top) * scaleY;
+      // Calculate coordinates relative to canvas in CSS pixels
+      const clickX = e.clientX - rect.left;
+      const clickY = e.clientY - rect.top;
 
       // Check hearts from top (newest) to bottom
       for (let i = heartsRef.current.length - 1; i >= 0; i--) {
@@ -83,6 +87,10 @@ export default function CatchHearts({ onClose }) {
         if (dist < h.size * 1.2) {
           scoreRef.current = Math.max(0, scoreRef.current + h.points);
           setScore(scoreRef.current);
+          if (h.emoji === BOMB) {
+            setIsShaking(true);
+            setTimeout(() => setIsShaking(false), 400);
+          }
           heartsRef.current.splice(i, 1);
           break;
         }
@@ -171,11 +179,11 @@ export default function CatchHearts({ onClose }) {
     <div className="catch-hearts">
       <h3 className="catch-hearts-title">Catch Hearts 💗</h3>
 
-      <div className="catch-canvas-container">
+      <div className={`catch-canvas-container${isShaking ? ' shake' : ''}`}>
         <canvas
           ref={canvasRef}
           className="catch-canvas"
-          onClick={handleCanvasClick}
+          onPointerDown={handleCanvasClick}
         />
 
         {/* HUD */}
@@ -198,7 +206,7 @@ export default function CatchHearts({ onClose }) {
             <p className="catch-overlay-msg">
               Tap the falling hearts to catch them!
               <br />
-              Avoid 💔 broken hearts.
+              Avoid 💔 broken hearts & 💣 bombs!
               <br />
               🌹 roses give bonus points!
             </p>

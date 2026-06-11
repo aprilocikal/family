@@ -5,6 +5,8 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import LoveQuiz from './LoveQuiz';
 import MemoryMatch from './MemoryMatch';
 import CatchHearts from './CatchHearts';
+import RobloxTower from './RobloxTower';
+import RobloxObby3D from './RobloxObby3D';
 import './GameSection.css';
 import { X } from 'lucide-react';
 
@@ -30,6 +32,20 @@ const GAMES = [
     desc: 'Catch falling hearts!',
     Component: CatchHearts,
   },
+  {
+    id: 'tower-climb',
+    emoji: '🗼',
+    title: 'Tower of Seasons',
+    desc: 'Climb a multiplayer obstacle tower together!',
+    Component: RobloxTower,
+  },
+  {
+    id: 'roblox-obby-3d',
+    emoji: '🧱',
+    title: 'Roblox Obby 3D',
+    desc: 'Exactly like the real 3D Roblox obby game!',
+    Component: RobloxObby3D,
+  },
 ];
 
 export default function GameSection() {
@@ -48,6 +64,35 @@ export default function GameSection() {
     return () => {
       window.removeEventListener('keydown', handleKey);
       document.body.style.overflow = '';
+    };
+  }, [activeGame]);
+
+  // Handle game-to-parent music coordination (pause Iris when game plays)
+  useEffect(() => {
+    if (!activeGame) return;
+
+    const handleMessage = (e) => {
+      if (e.data && e.data.type === 'naylin-game-music' && e.data.action === 'pause') {
+        // Pause Iris music
+        const audioEl = document.querySelector('.music-player audio');
+        if (audioEl && !audioEl.paused) {
+          audioEl.pause();
+          window.__naylinMusicWasPaused = true;
+        }
+      }
+    };
+    window.addEventListener('message', handleMessage);
+
+    return () => {
+      window.removeEventListener('message', handleMessage);
+      // Resume Iris when game closes
+      if (window.__naylinMusicWasPaused) {
+        const audioEl = document.querySelector('.music-player audio');
+        if (audioEl) {
+          audioEl.play().catch(() => {});
+        }
+        window.__naylinMusicWasPaused = false;
+      }
     };
   }, [activeGame]);
 
@@ -109,7 +154,7 @@ export default function GameSection() {
             if (e.target === e.currentTarget) handleClose();
           }}
         >
-          <div className="game-modal-content glass">
+          <div className={`game-modal-content glass ${activeGame === 'roblox-obby-3d' ? 'tower-3d-modal' : ''}`}>
             <button className="game-modal-close" onClick={handleClose}>
               <X size={20} />
             </button>

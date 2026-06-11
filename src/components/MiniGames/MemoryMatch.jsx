@@ -31,7 +31,7 @@ function createDeck() {
   return shuffleArray(pairs);
 }
 
-export default function MemoryMatch({ onClose }) {
+export default function MemoryMatch() {
   const [cards, setCards] = useState(() => createDeck());
   const [flipped, setFlipped] = useState([]);
   const [matched, setMatched] = useState([]);
@@ -50,38 +50,6 @@ export default function MemoryMatch({ onClose }) {
     return () => clearInterval(timerRef.current);
   }, [gameWon]);
 
-  // Check for match when 2 cards are flipped
-  useEffect(() => {
-    if (flipped.length !== 2) return;
-
-    setIsChecking(true);
-    setMoves((m) => m + 1);
-
-    const [first, second] = flipped;
-    const card1 = cards.find((c) => c.id === first);
-    const card2 = cards.find((c) => c.id === second);
-
-    if (card1.pairId === card2.pairId) {
-      // Match found
-      const newMatched = [...matched, card1.pairId];
-      setMatched(newMatched);
-      setFlipped([]);
-      setIsChecking(false);
-
-      // Check win
-      if (newMatched.length === CARD_ICONS.length) {
-        setGameWon(true);
-        clearInterval(timerRef.current);
-      }
-    } else {
-      // No match — flip back after 1s
-      setTimeout(() => {
-        setFlipped([]);
-        setIsChecking(false);
-      }, 1000);
-    }
-  }, [flipped, cards, matched]);
-
   const handleCardClick = useCallback(
     (cardId) => {
       if (isChecking) return;
@@ -90,7 +58,37 @@ export default function MemoryMatch({ onClose }) {
       if (matched.includes(card.pairId)) return;
       if (flipped.length >= 2) return;
 
-      setFlipped((prev) => [...prev, cardId]);
+      const nextFlipped = [...flipped, cardId];
+      setFlipped(nextFlipped);
+
+      if (nextFlipped.length === 2) {
+        setIsChecking(true);
+        setMoves((m) => m + 1);
+
+        const [first, second] = nextFlipped;
+        const card1 = cards.find((c) => c.id === first);
+        const card2 = cards.find((c) => c.id === second);
+
+        if (card1.pairId === card2.pairId) {
+          // Match found
+          const newMatched = [...matched, card1.pairId];
+          setMatched(newMatched);
+          setFlipped([]);
+          setIsChecking(false);
+
+          // Check win
+          if (newMatched.length === CARD_ICONS.length) {
+            setGameWon(true);
+            clearInterval(timerRef.current);
+          }
+        } else {
+          // No match — flip back after 1s
+          setTimeout(() => {
+            setFlipped([]);
+            setIsChecking(false);
+          }, 1000);
+        }
+      }
     },
     [isChecking, flipped, matched, cards]
   );

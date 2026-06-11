@@ -90,36 +90,49 @@ function getResultMessage(score) {
 }
 
 function Confetti() {
-  const pieces = Array.from({ length: 40 }, (_, i) => {
+  const [pieces] = useState(() => Array.from({ length: 40 }, (_, i) => {
     const colors = ['#C8748A', '#F2C4CE', '#D4A574', '#FFD700', '#FF69B4', '#FF1493'];
     const color = colors[Math.floor(Math.random() * colors.length)];
     const left = Math.random() * 100;
     const delay = Math.random() * 2;
     const duration = 2 + Math.random() * 2;
     const size = 6 + Math.random() * 8;
+    const isCircle = Math.random() > 0.5;
 
-    return (
-      <div
-        key={i}
-        className="confetti-piece"
-        style={{
-          left: `${left}%`,
-          width: `${size}px`,
-          height: `${size}px`,
-          backgroundColor: color,
-          animationDelay: `${delay}s`,
-          animationDuration: `${duration}s`,
-          borderRadius: Math.random() > 0.5 ? '50%' : '2px',
-          opacity: 1,
-        }}
-      />
-    );
-  });
+    return {
+      id: i,
+      color,
+      left,
+      delay,
+      duration,
+      size,
+      isCircle,
+    };
+  }));
 
-  return <div className="quiz-confetti">{pieces}</div>;
+  return (
+    <div className="quiz-confetti">
+      {pieces.map((p) => (
+        <div
+          key={p.id}
+          className="confetti-piece"
+          style={{
+            left: `${p.left}%`,
+            width: `${p.size}px`,
+            height: `${p.size}px`,
+            backgroundColor: p.color,
+            animationDelay: `${p.delay}s`,
+            animationDuration: `${p.duration}s`,
+            borderRadius: p.isCircle ? '50%' : '2px',
+            opacity: 1,
+          }}
+        />
+      ))}
+    </div>
+  );
 }
 
-export default function LoveQuiz({ onClose }) {
+export default function LoveQuiz() {
   const [questions, setQuestions] = useState(() => {
     const shuffled = [...QUESTION_BANK].sort(() => 0.5 - Math.random());
     return shuffled.slice(0, 5);

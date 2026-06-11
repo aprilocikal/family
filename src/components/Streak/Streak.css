@@ -241,3 +241,62 @@
     font-size: 1.3rem;
   }
 }
+
+/* ── Share to Story Button ── */
+.btn-share-story {
+  margin-top: 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: rgba(var(--rose-gold-rgb), 0.15);
+  border: 1px solid rgba(var(--rose-gold-rgb), 0.35);
+  color: var(--cream);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 500;
+  padding: 10px 22px;
+  border-radius: 24px;
+  cursor: pointer;
+  transition: all var(--transition-base);
+}
+
+.btn-share-story:hover {
+  background: var(--rose-gold);
+  color: var(--bg-deep);
+  border-color: var(--rose-gold);
+  box-shadow: 0 0 20px rgba(var(--rose-gold-rgb), 0.4);
+  transform: translateY(-2px);
+}
+
+.btn-share-story:active {
+  transform: translateY(0);
+}
+
+/* ── Share Toast Notification ── */
+.share-toast {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background: rgba(20, 10, 15, 0.85);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(12px);
+  color: var(--cream);
+  padding: 12px 24px;
+  border-radius: 30px;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  z-index: 1000;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 15px rgba(var(--rose-gold-rgb), 0.25);
+  opacity: 0;
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s;
+  pointer-events: none;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.share-toast.show {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
