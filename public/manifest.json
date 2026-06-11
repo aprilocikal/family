@@ -1,0 +1,17 @@
+{
+  "short_name": "Naylin",
+  "name": "For My Special Person — Naylin",
+  "icons": [
+    {
+      "src": "/pwa-icon.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any maskable"
+    }
+  ],
+  "start_url": "/",
+  "background_color": "#1b061b",
+  "theme_color": "#f57eb6",
+  "display": "standalone",
+  "orientation": "portrait"
+}

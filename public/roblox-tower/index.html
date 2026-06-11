@@ -914,27 +914,63 @@
         justify-content: flex-start !important;
       }
       #joystick-zone {
-        bottom: 8px !important;
-        left: 8px !important;
-        width: 80px !important;
-        height: 80px !important;
+        bottom: calc(12px + env(safe-area-inset-bottom)) !important;
+        left: calc(24px + env(safe-area-inset-left)) !important;
+        width: 85px !important;
+        height: 85px !important;
       }
       #mobile-actions-zone {
-        bottom: 8px !important;
-        right: 8px !important;
+        bottom: calc(12px + env(safe-area-inset-bottom)) !important;
+        right: calc(24px + env(safe-area-inset-right)) !important;
+        gap: 8px !important;
       }
       #mobile-jump-btn {
-        width: 60px !important;
-        height: 60px !important;
-        font-size: 11px !important;
+        width: 64px !important;
+        height: 64px !important;
+        font-size: 12px !important;
       }
       #mobile-sprint-btn {
-        width: 46px !important;
-        height: 46px !important;
+        width: 48px !important;
+        height: 48px !important;
+        font-size: 9px !important;
       }
       #height-minimap {
         height: 80px !important;
-        bottom: 100px !important;
+        bottom: 110px !important;
+      }
+    }
+
+    /* iPad and tablets scaling */
+    @media (min-width: 768px) and (min-height: 521px) {
+      #joystick-zone {
+        width: 155px !important;
+        height: 155px !important;
+        left: calc(36px + env(safe-area-inset-left)) !important;
+        bottom: calc(36px + env(safe-area-inset-bottom)) !important;
+      }
+      #joystick-handle {
+        width: 60px !important;
+        height: 60px !important;
+      }
+      #mobile-actions-zone {
+        right: calc(36px + env(safe-area-inset-right)) !important;
+        bottom: calc(36px + env(safe-area-inset-bottom)) !important;
+        gap: 16px !important;
+      }
+      .mobile-btn {
+        width: 85px !important;
+        height: 85px !important;
+        font-size: 15px !important;
+      }
+      #mobile-jump-btn {
+        width: 105px !important;
+        height: 105px !important;
+        font-size: 17px !important;
+      }
+      #mobile-sprint-btn {
+        width: 76px !important;
+        height: 76px !important;
+        font-size: 13px !important;
       }
     }
   </style>
@@ -3060,6 +3096,13 @@
         if (this.invincibleTimer <= 0) this.checkKillCollisions();
         this.checkWinCondition();
 
+        const currentLeaderboard = this.getLeaderboardData();
+        if (currentLeaderboard.length > 0 && currentLeaderboard[0].stage >= 11) {
+          const winner = currentLeaderboard[0];
+          this.endGameWithWinner(winner);
+          return;
+        }
+
         if (this.isHost || this.isGuest) {
           this.syncNetwork(dt);
           this.updateNetworkPlayers(dt);
@@ -3562,12 +3605,21 @@
 
         if (document.pointerLockElement) document.exitPointerLock();
 
+        // Adjust title for time out
+        const titleEl = document.getElementById('gameover-screen').querySelector('.win-title');
+        if (titleEl) {
+          titleEl.textContent = "⏱️ TIME'S UP! ⏱️";
+          titleEl.style.background = "linear-gradient(180deg, #ff5252, #ff1744)";
+          titleEl.style.webkitBackgroundClip = "text";
+          titleEl.style.webkitTextFillColor = "transparent";
+        }
+
         const leaderboardData = this.getLeaderboardData();
         const winner = leaderboardData[0];
         
         document.getElementById('go-winner-msg').textContent = winner.isYou 
-          ? `🎉 Winner: You! (Stage ${winner.stage}) 🎉`
-          : `🏆 Winner: ${winner.name}! (Stage ${winner.stage}) 🏆`;
+          ? `🎉 Winner: You! (Stage ${winner.stage >= 11 ? 'Finished' : winner.stage}) 🎉`
+          : `🏆 Winner: ${winner.name}! (Stage ${winner.stage >= 11 ? 'Finished' : winner.stage}) 🏆`;
 
         const statsEl = document.getElementById('go-stats');
         statsEl.innerHTML = leaderboardData.map((p, idx) => {
@@ -3577,7 +3629,47 @@
           else if (idx === 2) medal = '🥉 ';
           return `<div style="display:flex; justify-content:space-between; margin-bottom:6px; font-weight:${p.isYou ? '900' : 'normal'}; color:${p.isYou ? '#ffd54f' : '#fff'};">
             <span>${medal}${idx + 1}. ${p.name}</span>
-            <span>Stage ${p.stage}</span>
+            <span>${p.stage >= 11 ? 'Finished' : 'Stage ' + p.stage}</span>
+          </div>`;
+        }).join('');
+
+        document.getElementById('gameover-screen').style.display = 'flex';
+        document.getElementById('hud').style.display = 'none';
+        document.getElementById('leaderboard').style.display = 'none';
+        document.getElementById('height-minimap').style.display = 'none';
+      }
+
+      endGameWithWinner(winner) {
+        if (this.state !== 'playing') return;
+        this.state = 'gameover';
+        this.audio.stopBgMusic();
+        if (this.audioEnabled) this.audio.playWin();
+
+        if (document.pointerLockElement) document.exitPointerLock();
+
+        // Adjust title for winner conquers tower
+        const titleEl = document.getElementById('gameover-screen').querySelector('.win-title');
+        if (titleEl) {
+          titleEl.textContent = "🎉 TOWER CONQUERED! 🎉";
+          titleEl.style.background = "linear-gradient(180deg, #ffd700, #ff9800)";
+          titleEl.style.webkitBackgroundClip = "text";
+          titleEl.style.webkitTextFillColor = "transparent";
+        }
+
+        document.getElementById('go-winner-msg').textContent = winner.isYou 
+          ? `🎉 Winner: You! (Tower Conquered!) 🎉`
+          : `🏆 Winner: ${winner.name}! (Tower Conquered!) 🏆`;
+
+        const leaderboardData = this.getLeaderboardData();
+        const statsEl = document.getElementById('go-stats');
+        statsEl.innerHTML = leaderboardData.map((p, idx) => {
+          let medal = '';
+          if (idx === 0) medal = '🥇 ';
+          else if (idx === 1) medal = '🥈 ';
+          else if (idx === 2) medal = '🥉 ';
+          return `<div style="display:flex; justify-content:space-between; margin-bottom:6px; font-weight:${p.isYou ? '900' : 'normal'}; color:${p.isYou ? '#ffd54f' : '#fff'};">
+            <span>${medal}${idx + 1}. ${p.name}</span>
+            <span>${p.stage >= 11 ? 'Finished' : 'Stage ' + p.stage}</span>
           </div>`;
         }).join('');
 
@@ -3635,7 +3727,7 @@
           if (idx === 0) medal = '🥇';
           else if (idx === 1) medal = '🥈';
           else if (idx === 2) medal = '🥉';
-          shareText += `${medal} *${idx + 1}. ${p.name}* - Stage ${p.stage} (${p.height}m)\n`;
+          shareText += `${medal} *${idx + 1}. ${p.name}* - ${p.stage >= 11 ? 'Finished' : 'Stage ' + p.stage} (${p.height}m)\n`;
         });
         
         let shareUrl = window.location.href;
