@@ -6,7 +6,7 @@
   background: linear-gradient(
     180deg,
     var(--bg-deep) 0%,
-    rgba(42, 10, 30, 0.35) 50%,
+    var(--wine) 50%,
     var(--bg-deep) 100%
   );
   min-height: 80vh;
@@ -40,19 +40,29 @@
   cursor: pointer;
 }
 
-/* Bloom Emoji */
+/* Bloom Emoji / Custom SVG */
 .garden-bloom {
   font-size: clamp(2.8rem, 5vw, 3.8rem);
   position: relative;
   z-index: 2;
   transition: transform 0.3s var(--ease-out-back),
               filter 0.3s ease;
-  filter: drop-shadow(0 0 8px rgba(var(--rose-gold-rgb), 0.2));
+}
+
+.garden-bloom svg {
+  width: 1.2em;
+  height: 1.2em;
+  display: block;
+  filter: drop-shadow(0 4px 10px rgba(0, 118, 255, 0.15)) drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+  transition: filter 0.3s ease, transform 0.3s var(--ease-out-back);
 }
 
 .garden-flower:hover .garden-bloom {
   transform: scale(1.2) translateY(-6px);
-  filter: drop-shadow(0 0 18px rgba(var(--rose-gold-rgb), 0.5));
+}
+
+.garden-flower:hover .garden-bloom svg {
+  filter: drop-shadow(0 8px 25px rgba(var(--rose-gold-rgb), 0.55)) drop-shadow(0 3px 6px rgba(0, 0, 0, 0.12));
 }
 
 .garden-flower:active .garden-bloom {
@@ -197,16 +207,16 @@
   inset: 0;
   background: linear-gradient(
     135deg,
-    rgba(245, 126, 182, 0.22) 0%,
-    rgba(255, 209, 230, 0.08) 50%,
-    rgba(230, 194, 128, 0.15) 100%
+    rgba(255, 255, 255, 0.85) 0%,
+    rgba(184, 222, 255, 0.55) 50%,
+    rgba(94, 184, 245, 0.75) 100%
   );
-  border: 1px solid rgba(245, 126, 182, 0.35);
+  border: 2px solid rgba(0, 118, 255, 0.45);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   clip-path: polygon(0% 0%, 100% 0%, 65% 100%, 35% 100%);
   border-radius: 0 0 30px 30px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 15px 35px rgba(30, 59, 112, 0.18);
 }
 
 /* Pink Ribbon Knot */
@@ -218,7 +228,7 @@
   font-size: 2.8rem;
   z-index: 6;
   animation: bouquet-heartbeat 2.5s infinite ease-in-out;
-  filter: drop-shadow(0 4px 12px rgba(245, 126, 182, 0.4));
+  filter: drop-shadow(0 4px 12px rgba(94, 184, 245, 0.4));
 }
 
 @keyframes bouquet-heartbeat {

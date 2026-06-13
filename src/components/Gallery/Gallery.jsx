@@ -2,26 +2,21 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import './Gallery.css';
 import { BookOpen, Camera, Gift, Heart, ChevronLeft, ChevronRight, X, Sparkles, Lightbulb } from 'lucide-react';
 import { triggerFireworks } from '../../utils/fireworks';
-import gallery1 from '../../assets/images/gallery-1.webp';
-import gallery2 from '../../assets/images/gallery-2.webp';
-import gallery3 from '../../assets/images/gallery-3.webp';
-import gallery4 from '../../assets/images/gallery-4.webp';
-import gallery5 from '../../assets/images/gallery-5.webp';
-import gallery6 from '../../assets/images/gallery-6.webp';
-import gallery7 from '../../assets/images/gallery-7.webp';
+
+const PLACEHOLDER_SVG = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="100%" height="100%"><defs><linearGradient id="g1" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="%23E2EDF8"/><stop offset="100%" stop-color="%23F7F9FC"/></linearGradient><linearGradient id="g2" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="%23A5C7E6"/><stop offset="100%" stop-color="%238BB0D6"/></linearGradient><linearGradient id="g3" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="%23C2D8ED"/><stop offset="100%" stop-color="%23A9C7E3"/></linearGradient></defs><rect width="400" height="300" fill="url(%23g1)"/><circle cx="280" cy="110" r="25" fill="%23FCE8B2" opacity="0.9"/><circle cx="280" cy="110" r="35" fill="%23FCE8B2" opacity="0.3"/><polygon points="50,300 190,140 310,300" fill="url(%23g3)" opacity="0.8"/><polygon points="130,300 270,110 420,300" fill="url(%23g2)" opacity="0.9"/><g transform="translate(188, 110)" opacity="0.45"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z" fill="%233A5C8B"/></g></svg>`;
 
 const SLOT_COUNT = 7;
 
 export default function Gallery() {
-  // Each photo: { src: dataURL | null, caption: string, width: number, height: number }
+  // Each photo: { src: dataURL | null, caption: string, width: number, height: number, isPlaceholder: boolean }
   const [photos, setPhotos] = useState([
-    { src: gallery4, caption: 'you', width: 1200, height: 1600 },
-    { src: gallery1, caption: 'are', width: 900, height: 1600 },
-    { src: gallery2, caption: 'so', width: 1600, height: 1200 },
-    { src: gallery3, caption: 'beautiful', width: 1600, height: 1200 },
-    { src: gallery5, caption: 'every', width: 1280, height: 960 },
-    { src: gallery6, caption: 'single', width: 1440, height: 1080 },
-    { src: gallery7, caption: 'day', width: 1024, height: 767 },
+    { src: PLACEHOLDER_SVG, caption: 'untuk', width: 1200, height: 1600, isPlaceholder: true },
+    { src: PLACEHOLDER_SVG, caption: 'papa', width: 900, height: 1600, isPlaceholder: true },
+    { src: PLACEHOLDER_SVG, caption: 'dan', width: 1600, height: 1200, isPlaceholder: true },
+    { src: PLACEHOLDER_SVG, caption: 'bunda', width: 1600, height: 1200, isPlaceholder: true },
+    { src: PLACEHOLDER_SVG, caption: 'yang', width: 1280, height: 960, isPlaceholder: true },
+    { src: PLACEHOLDER_SVG, caption: 'paling', width: 1440, height: 1080, isPlaceholder: true },
+    { src: PLACEHOLDER_SVG, caption: 'berharga', width: 1024, height: 767, isPlaceholder: true },
   ]);
 
   const [columnCount, setColumnCount] = useState(3);
@@ -110,7 +105,7 @@ export default function Gallery() {
           
           setPhotos((prev) => {
             const next = [...prev];
-            next[index] = { ...next[index], src: webpDataUrl, width, height };
+            next[index] = { ...next[index], src: webpDataUrl, width, height, isPlaceholder: false };
             return next;
           });
         }
@@ -122,7 +117,7 @@ export default function Gallery() {
 
   const handleSlotClick = useCallback(
     (index) => {
-      if (photos[index].src) {
+      if (photos[index].src && !photos[index].isPlaceholder) {
         setLightbox({ open: true, index });
       } else {
         fileInputRefs.current[index]?.click();
@@ -133,7 +128,7 @@ export default function Gallery() {
 
   /* ── Lightbox helpers ── */
   const filledIndices = photos
-    .map((p, i) => (p.src ? i : null))
+    .map((p, i) => (p.src && !p.isPlaceholder ? i : null))
     .filter((i) => i !== null);
 
   const closeLightbox = useCallback(() => {
@@ -253,7 +248,11 @@ export default function Gallery() {
         if (topPhoto) {
           const origIdx = photos.findIndex((p) => p.src === topPhoto.src);
           if (origIdx !== -1) {
-            setLightbox({ open: true, index: origIdx });
+            if (photos[origIdx].isPlaceholder) {
+              fileInputRefs.current[origIdx]?.click();
+            } else {
+              setLightbox({ open: true, index: origIdx });
+            }
           }
         }
       }
@@ -292,7 +291,7 @@ export default function Gallery() {
     const cx = rect.left + rect.width / 2;
     const cy = rect.top + rect.height / 2;
     const count = 12;
-    const heartColors = ['#ff4b82', '#ff70a6', '#ffd1e6', '#e0aaff', '#f57eb6'];
+    const heartColors = ['#4ba5ff', '#70b8ff', '#d1e8ff', '#aad4ff', '#5eb8f5'];
  
     for (let i = 0; i < count; i++) {
       const heart = document.createElement('div');
@@ -479,7 +478,7 @@ export default function Gallery() {
                         aspectRatio: photo.width && photo.height ? `${photo.width} / ${photo.height}` : '1 / 1'
                       }}
                     >
-                      {photo.src ? (
+                      {photo.src && !photo.isPlaceholder ? (
                         <div className="gallery-image-wrapper">
                           <img
                             src={photo.src}
@@ -491,7 +490,7 @@ export default function Gallery() {
                         </div>
                       ) : (
                         <div className="gallery-placeholder">
-                          <span className="gallery-placeholder-emoji"><Camera size={36} style={{ color: 'rgba(245, 126, 182, 0.4)' }} /></span>
+                          <span className="gallery-placeholder-emoji"><Camera size={36} style={{ color: 'rgba(94, 184, 245, 0.4)' }} /></span>
                           <span className="gallery-placeholder-text">
                             tap to add photo
                           </span>

@@ -17,7 +17,7 @@ function RoseFlower() {
         <radialGradient id="petalGrad" cx="30%" cy="30%">
           <stop offset="0%" stopColor="var(--blush)" stopOpacity="0.9" />
           <stop offset="60%" stopColor="var(--rose-gold)" stopOpacity="0.8" />
-          <stop offset="100%" stopColor="var(--rose-dark, #8B3A5C)" stopOpacity="0.6" />
+          <stop offset="100%" stopColor="var(--rose-dark, #3A5C8B)" stopOpacity="0.6" />
         </radialGradient>
         <radialGradient id="centerGrad" cx="40%" cy="40%">
           <stop offset="0%" stopColor="var(--gold-shimmer)" />
@@ -89,17 +89,17 @@ export default function Hero() {
       {/* Main content */}
       <div className="hero-content" ref={contentRef}>
         {/* Eyebrow */}
-        <span className="section-eyebrow hero-eyebrow">you are my</span>
+        <span className="section-eyebrow hero-eyebrow">thank you for everything</span>
 
         {/* Title */}
         <h1 className="hero-title">
-          Special Person,
-          <span className="hero-name">Naylin</span>
+          Beloved Parents,
+          <span className="hero-name">Papa & Bunda</span>
         </h1>
 
         {/* Subtitle */}
         <p className="hero-subtitle">
-          In a world full of people, my heart chose you
+          In a world full of people, you are my home and anchor
         </p>
 
         {/* Flower decoration */}

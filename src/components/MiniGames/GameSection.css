@@ -105,7 +105,7 @@
 .game-modal-content {
   position: relative;
   width: 100%;
-  max-width: 700px;
+  max-width: 520px; /* Reduced from 700px to make it look compact and elegant */
   max-height: 90vh;
   overflow-y: auto;
   padding: 32px;
@@ -160,7 +160,9 @@
   }
 
   .game-modal-content {
-    padding: 24px 16px;
+    padding: 24px 20px;
+    width: 92%;
+    max-width: 440px;
     max-height: 85vh;
   }
 }

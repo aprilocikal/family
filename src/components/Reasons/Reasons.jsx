@@ -1,42 +1,43 @@
 import { useEffect, useRef } from 'react';
 import './Reasons.css';
+import { HandHeart, Anchor, BookOpen, Home, Heart, Sparkles } from 'lucide-react';
 
 const reasons = [
   {
-    emoji: '🌹',
-    title: 'Your Smile',
+    Icon: HandHeart,
+    title: 'Doa Papa & Bunda',
     description:
-      'The one that lights up my darkest days and makes everything worthwhile.',
+      'Jangkar sunyi yang selalu melindungi dan menuntun setiap langkah dalam hidupku.',
   },
   {
-    emoji: '💫',
-    title: 'Your Soul',
+    Icon: Anchor,
+    title: 'Pengorbananmu',
     description:
-      'Rare, luminous, and more precious than anything this world has to offer.',
+      'Mengesampingkan kenyamanan pribadi demi memastikan aku mendapatkan masa depan terbaik.',
   },
   {
-    emoji: '🌸',
-    title: 'Your Kindness',
+    Icon: BookOpen,
+    title: 'Ajaran & Nasihat',
     description:
-      'The way you care for everyone around you makes this world a better place.',
+      'Menanamkan nilai kejujuran, kebaikan, dan keteguhan yang membentuk kepribadianku.',
   },
   {
-    emoji: '✨',
-    title: 'Your Laughter',
+    Icon: Home,
+    title: 'Kehangatan Rumah',
     description:
-      'My favourite sound in the universe. It echoes in my heart forever.',
+      'Rumah yang selalu terbuka, menawarkan kedamaian dan kenyamanan tak peduli sekeras apa pun dunia luar.',
   },
   {
-    emoji: '🌺',
-    title: 'Your Strength',
+    Icon: Heart,
+    title: 'Kesabaranmu',
     description:
-      'You face every storm with grace. I admire you more each day.',
+      'Menerima segala kesalahan dan kekuranganku dengan kelapangan dada dan kasih sayang tanpa batas.',
   },
   {
-    emoji: '💖',
-    title: 'Simply You',
+    Icon: Sparkles,
+    title: 'Segalanya Untukku',
     description:
-      'Every version of you is perfect. You are more than enough. You are everything.',
+      'Atas kasih sayang tak berujung, bimbingan tiada henti, dan menjadi orang tua terbaik yang pernah ada.',
   },
 ];
 
@@ -44,21 +45,27 @@ const Reasons = () => {
   const sectionRef = useRef(null);
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('revealed');
-          }
-        });
-      },
-      { threshold: 0.1 }
-    );
+    const handleScroll = () => {
+      const revealEls = sectionRef.current?.querySelectorAll('.reveal');
+      if (!revealEls) return;
 
-    const revealEls = sectionRef.current?.querySelectorAll('.reveal');
-    revealEls?.forEach((el) => observer.observe(el));
+      // Triggers when element is 80% up from the bottom of the viewport
+      const triggerBottom = (window.innerHeight / 5) * 4.2;
 
-    return () => observer.disconnect();
+      revealEls.forEach((el) => {
+        const boxTop = el.getBoundingClientRect().top;
+        if (boxTop < triggerBottom) {
+          el.classList.add('revealed');
+          el.classList.add('visible');
+        }
+      });
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    // Trigger on mount/delay to reveal elements already in view
+    setTimeout(handleScroll, 100);
+
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   return (
@@ -66,12 +73,12 @@ const Reasons = () => {
       <div className="section-inner">
         {/* Header */}
         <span className="section-eyebrow reveal">
-          a thousand reasons and counting
+          persembahan tulus untuk pelindungku
         </span>
         <h2 className="section-title reveal reveal-delay-1">
-          Why You Are
+          Mengapa Kalian Adalah
           <br />
-          <em>So Special</em>
+          <em>Seluruh Duniaku</em>
         </h2>
 
         {/* Cards Grid */}
@@ -82,9 +89,9 @@ const Reasons = () => {
               className={`reason-card glass reveal reveal-delay-${Math.min(index + 1, 5)}`}
             >
               <div className="reason-card-glow" aria-hidden="true"></div>
-              <span className="reason-emoji" aria-hidden="true">
-                {reason.emoji}
-              </span>
+              <div className="reason-icon-wrapper" aria-hidden="true">
+                <reason.Icon className="reason-icon" />
+              </div>
               <h3 className="reason-title">{reason.title}</h3>
               <p className="reason-description">{reason.description}</p>
             </div>

@@ -5,9 +5,7 @@ import LoveLetter from './components/LoveLetter/LoveLetter'
 import Reasons from './components/Reasons/Reasons'
 import Gallery from './components/Gallery/Gallery'
 import Garden from './components/Garden/Garden'
-import Streak from './components/Streak/Streak'
 import GameSection from './components/MiniGames/GameSection'
-import RedStringMap from './components/RedStringMap/RedStringMap'
 import Finale from './components/Finale/Finale'
 import MusicPlayer from './components/MusicPlayer/MusicPlayer'
 import PetalRain from './components/PetalRain/PetalRain'
@@ -78,9 +76,7 @@ function App() {
           <Reasons />
           <Gallery />
           <Garden />
-          <Streak />
           <GameSection />
-          <RedStringMap />
           <Finale />
         </main>
       )}

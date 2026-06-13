@@ -46,9 +46,9 @@
   border-radius: inherit;
   background: linear-gradient(
     135deg,
-    rgba(200, 116, 138, 0.08) 0%,
-    rgba(212, 165, 116, 0.06) 50%,
-    rgba(200, 116, 138, 0.1) 100%
+    rgba(116, 165, 200, 0.08) 0%,
+    rgba(128, 200, 230, 0.06) 50%,
+    rgba(116, 165, 200, 0.1) 100%
   );
   opacity: 0;
   transition: opacity 0.45s ease;
@@ -59,10 +59,10 @@
 .reason-card:hover {
   transform: translateY(-10px);
   box-shadow:
-    0 0 35px rgba(200, 116, 138, 0.2),
-    0 0 70px rgba(200, 116, 138, 0.08),
+    0 0 35px rgba(116, 165, 200, 0.2),
+    0 0 70px rgba(116, 165, 200, 0.08),
     0 12px 40px rgba(0, 0, 0, 0.3);
-  border-color: rgba(200, 116, 138, 0.5);
+  border-color: rgba(116, 165, 200, 0.5);
 }
 
 .reason-card:hover .reason-card-glow {
@@ -71,17 +71,36 @@
 
 /* ---- Card Content ---- */
 
-.reason-emoji {
-  display: block;
-  font-size: 2.8rem;
+.reason-icon-wrapper {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   margin-bottom: 1.25rem;
   position: relative;
   z-index: 1;
-  transition: transform 0.4s ease;
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  color: var(--rose-gold);
+  background: rgba(var(--rose-gold-rgb, 184, 134, 11), 0.1);
+  padding: 14px;
+  border-radius: 50%;
+  border: 1px solid rgba(var(--rose-gold-rgb, 184, 134, 11), 0.15);
+  width: 60px;
+  height: 60px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
 }
 
-.reason-card:hover .reason-emoji {
-  transform: scale(1.15);
+.reason-card:hover .reason-icon-wrapper {
+  transform: scale(1.15) rotate(8deg);
+  background: rgba(var(--rose-gold-rgb, 184, 134, 11), 0.2);
+  border-color: var(--rose-gold);
+  color: var(--cream);
+  box-shadow: 0 8px 25px rgba(var(--rose-gold-rgb, 184, 134, 11), 0.25);
+}
+
+.reason-icon {
+  width: 32px;
+  height: 32px;
+  stroke-width: 1.5px;
 }
 
 .reason-title {
@@ -118,7 +137,8 @@
   transition: opacity 0.8s ease, transform 0.8s ease;
 }
 
-.reasons-section .reveal.revealed {
+.reasons-section .reveal.revealed,
+.reasons-section .reveal.visible {
   opacity: 1;
   transform: translateY(0);
 }
@@ -153,8 +173,16 @@
     padding: 2rem 1.5rem;
   }
 
-  .reason-emoji {
-    font-size: 2.4rem;
+  .reason-icon-wrapper {
+    width: 54px;
+    height: 54px;
+    padding: 12px;
+    margin-bottom: 1rem;
+  }
+
+  .reason-icon {
+    width: 28px;
+    height: 28px;
   }
 
   .reason-title {
@@ -178,9 +206,16 @@
     border-radius: 16px;
   }
 
-  .reason-emoji {
-    font-size: 2rem;
+  .reason-icon-wrapper {
+    width: 48px;
+    height: 48px;
+    padding: 10px;
     margin-bottom: 0.75rem;
+  }
+
+  .reason-icon {
+    width: 24px;
+    height: 24px;
   }
 
   .reason-title {

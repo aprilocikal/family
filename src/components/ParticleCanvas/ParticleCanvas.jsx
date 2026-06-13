@@ -6,8 +6,8 @@ import './ParticleCanvas.css';
 
 const PARTICLE_COUNT = 35;
 
-// Gold shimmer color (212, 165, 116)
-const GOLD = { r: 212, g: 165, b: 116 };
+// Blue shimmer color (94, 184, 245)
+const BLUE_SHIMMER = { r: 94, g: 184, b: 245 };
 
 function createParticle(canvasWidth, canvasHeight, randomY = false) {
   return {
@@ -105,7 +105,7 @@ export default function ParticleCanvas({ isActive = true }) {
 
         // Draw particle
         ctx.globalAlpha = currentOpacity;
-        ctx.fillStyle = `rgba(${GOLD.r}, ${GOLD.g}, ${GOLD.b}, 1)`;
+        ctx.fillStyle = `rgba(${BLUE_SHIMMER.r}, ${BLUE_SHIMMER.g}, ${BLUE_SHIMMER.b}, 1)`;
 
         if (p.isStar) {
           drawStar(ctx, p.x, p.y, p.size);

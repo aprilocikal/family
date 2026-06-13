@@ -79,18 +79,69 @@
   max-width: 720px;
   width: 100%;
   margin: 0 auto;
-  padding: 3.5rem 3rem;
+  padding: 4rem 3.5rem;
   text-align: center;
-  border-radius: 24px;
-  transition: box-shadow 0.5s ease, transform 0.5s ease;
+  border-radius: 50px 16px 50px 16px;
+  background: radial-gradient(circle at top left, rgba(255, 255, 255, 0.85) 0%, rgba(var(--wine-rgb, 235, 243, 255), 0.75) 100%);
+  border: 1px solid rgba(var(--rose-gold-rgb), 0.2);
+  box-shadow:
+    0 10px 40px rgba(var(--blush-rgb), 0.06),
+    0 0 80px rgba(var(--rose-gold-rgb), 0.02),
+    inset 0 0 20px rgba(var(--rose-gold-rgb), 0.02);
+  transition: all 0.5s var(--ease-out-expo);
+  overflow: hidden;
+}
+
+/* Elegant Royal Inset Border Frame */
+.love-letter-card::before {
+  content: '';
+  position: absolute;
+  inset: 12px;
+  border-radius: inherit;
+  border: 1.5px dashed rgba(var(--rose-gold-rgb), 0.25);
+  pointer-events: none;
+  z-index: 1;
+  transition: all 0.5s var(--ease-out-expo);
+}
+
+/* Diagonal Glossy Sheen Sweep Effect */
+.love-letter-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -150%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.35),
+    transparent
+  );
+  transform: skewX(-25deg);
+  z-index: 3;
+  pointer-events: none;
 }
 
 .love-letter-card:hover {
-  transform: translateY(-4px);
+  transform: translateY(-6px);
+  border-color: rgba(var(--rose-gold-rgb), 0.45);
   box-shadow:
-    0 0 40px rgba(200, 116, 138, 0.25),
-    0 0 80px rgba(200, 116, 138, 0.1),
-    0 8px 32px rgba(0, 0, 0, 0.3);
+    0 15px 45px rgba(var(--rose-gold-rgb), 0.15),
+    0 5px 15px rgba(var(--blush-rgb), 0.06),
+    0 0 100px rgba(var(--rose-gold-rgb), 0.12),
+    inset 0 0 30px rgba(var(--rose-gold-rgb), 0.05);
+}
+
+.love-letter-card:hover::before {
+  inset: 16px;
+  border-color: rgba(var(--rose-gold-rgb), 0.55);
+}
+
+/* Trigger sheen sweep on hover */
+.love-letter-card:hover::after {
+  left: 150%;
+  transition: left 1.2s var(--ease-out-expo);
 }
 
 /* ---- Top Flower Decoration ---- */
@@ -206,7 +257,8 @@
   transition: opacity 0.8s ease, transform 0.8s ease;
 }
 
-.love-letter-section .reveal.revealed {
+.love-letter-section .reveal.revealed,
+.love-letter-section .reveal.visible {
   opacity: 1;
   transform: translateY(0);
 }
@@ -225,8 +277,14 @@
   }
 
   .love-letter-card {
-    padding: 2.5rem 1.75rem;
-    border-radius: 18px;
+    padding: 3rem 2rem;
+    border-radius: 36px 12px 36px 12px;
+  }
+  .love-letter-card::before {
+    inset: 10px;
+  }
+  .love-letter-card:hover::before {
+    inset: 12px;
   }
 
   .ll-paragraph {
@@ -249,7 +307,14 @@
 
 @media (max-width: 480px) {
   .love-letter-card {
-    padding: 2rem 1.25rem;
+    padding: 2.5rem 1.5rem;
+    border-radius: 30px 10px 30px 10px;
+  }
+  .love-letter-card::before {
+    inset: 8px;
+  }
+  .love-letter-card:hover::before {
+    inset: 10px;
   }
 
   .ll-paragraph {

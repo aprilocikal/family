@@ -1,7 +1,13 @@
 {
-  "short_name": "Naylin",
-  "name": "For My Special Person — Naylin",
+  "short_name": "Parents",
+  "name": "For My Beloved Parents",
   "icons": [
+    {
+      "src": "/pwa-icon.png",
+      "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "any"
+    },
     {
       "src": "/pwa-icon.png",
       "type": "image/png",
@@ -10,8 +16,8 @@
     }
   ],
   "start_url": "/",
-  "background_color": "#1b061b",
-  "theme_color": "#f57eb6",
+  "background_color": "#050D1A",
+  "theme_color": "#5EB8F5",
   "display": "standalone",
   "orientation": "portrait"
 }

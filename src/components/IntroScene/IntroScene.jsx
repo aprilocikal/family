@@ -3,16 +3,16 @@
    ============================================================ */
 import { useState, useCallback, useEffect, useRef } from 'react';
 import './IntroScene.css';
-import { Sparkles } from 'lucide-react';
+import { Sparkles, Heart } from 'lucide-react';
 
 /* ── Petal colors ── */
 const PETAL_COLORS = [
-  'rgba(245, 126, 182, 0.9)',  /* rose-gold */
-  'rgba(255, 194, 222, 0.85)', /* blush */
-  'rgba(212, 165, 116, 0.8)',  /* gold-shimmer */
-  'rgba(213, 84, 146, 0.9)',    /* rose-dark */
-  'rgba(245, 126, 182, 0.7)',
-  'rgba(255, 194, 222, 0.7)',
+  'rgba(94, 184, 245, 0.9)',  /* rose-gold */
+  'rgba(184, 222, 255, 0.85)', /* blush */
+  'rgba(128, 200, 230, 0.8)',  /* gold-shimmer */
+  'rgba(58, 142, 212, 0.9)',    /* rose-dark */
+  'rgba(94, 184, 245, 0.7)',
+  'rgba(184, 222, 255, 0.7)',
 ];
 
 /* ── Generate random petals ── */
@@ -130,7 +130,7 @@ export default function IntroScene({ onComplete, onOpen }) {
 
           {/* Wax seal */}
           <div className="wax-seal">
-            <span className="wax-seal-letter">N</span>
+            <Heart size={22} fill="currentColor" className="wax-seal-heart" />
           </div>
 
           {/* Letter that slides out */}
@@ -139,7 +139,7 @@ export default function IntroScene({ onComplete, onOpen }) {
             <span className="letter-line" />
             <span className="letter-line" />
             <span className="letter-line" />
-            <span className="letter-heart">♥</span>
+            <span className="letter-heart">💙</span>
           </div>
         </div>
 
@@ -153,7 +153,7 @@ export default function IntroScene({ onComplete, onOpen }) {
                 '--tx': `${p.tx}px`,
                 '--ty': `${p.ty}px`,
                 '--rot': `${p.rot}deg`,
-                background: `radial-gradient(ellipse at 30% 30%, ${p.color}, rgba(213,84,146,0.6))`,
+                background: `radial-gradient(ellipse at 30% 30%, ${p.color}, rgba(58,142,212,0.6))`,
                 animationDelay: `${p.delay}s`,
                 transform: `scale(${p.scale})`,
               }}
@@ -176,7 +176,7 @@ export default function IntroScene({ onComplete, onOpen }) {
       {/* Prompt text */}
       {!opened && (
         <p className="intro-prompt">
-          tap to open a letter for someone special{' '}
+          tap to open a letter for my beloved parents{' '}
           <Sparkles size={16} style={{ display: 'inline-block', verticalAlign: 'middle', marginLeft: '4px', color: 'var(--rose-gold)' }} />
         </p>
       )}

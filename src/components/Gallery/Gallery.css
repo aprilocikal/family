@@ -6,7 +6,7 @@
   background: linear-gradient(
     180deg,
     var(--bg-deep) 0%,
-    rgba(42, 10, 30, 0.4) 50%,
+    var(--wine) 50%,
     var(--bg-deep) 100%
   );
   min-height: 100vh;
@@ -380,7 +380,7 @@
   height: 280px;
   overflow: hidden;
   border-radius: 12px;
-  background: #111;
+  background: var(--wine);
   border: 1px solid rgba(0, 0, 0, 0.08);
 }
 
@@ -539,9 +539,9 @@
 
 /* ── Surprise Polaroid Card ── */
 .gallery-album-card.polaroid-surprise {
-  background: linear-gradient(135deg, #1b061b 0%, #2c102c 100%) !important;
+  background: linear-gradient(135deg, var(--wine) 0%, var(--rose-deep) 100%) !important;
   border: 2px dashed rgba(var(--rose-gold-rgb), 0.5);
-  box-shadow: var(--shadow-glow-strong), 0 15px 35px rgba(0, 0, 0, 0.6);
+  box-shadow: var(--shadow-glow-strong), 0 15px 35px rgba(0, 0, 0, 0.2);
   cursor: pointer;
 }
 

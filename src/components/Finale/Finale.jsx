@@ -4,16 +4,16 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import './Finale.css';
 
-const FLOWERS = ['🌸', '🌺', '🌹', '🌸', '🌷'];
+const FLOWERS = ['💙', '✨', '💐', '💙', '🏡'];
 
 const CONFETTI_COLORS = [
   'var(--rose-gold)',
   'var(--blush)',
   'var(--gold-shimmer)',
-  '#E8A0B4',
-  '#F5D0D8',
-  '#D4A574',
-  '#C8748A',
+  '#A0C8E8',
+  '#D0E0F5',
+  '#74A5D4',
+  '#748AC8',
 ];
 
 export default function Finale() {
@@ -85,38 +85,37 @@ export default function Finale() {
 
       {/* Main content */}
       <div className={`finale__content reveal reveal-delay-1 ${isVisible ? 'visible' : ''}`}>
-        <p className="finale__eyebrow">from me to you</p>
+        <p className="finale__eyebrow">with all my love</p>
 
         <h2 className="finale__title section-title">
-          You Are Loved
-          <em>More Than You Know</em>
+          Thank You, Papa & Bunda
+          <em>You Are My Everything</em>
         </h2>
 
         <p className="finale__message">
-          Naylin, some people come into your life and change the way you see
-          everything, from the way light falls, the way music sounds, to the way your
-          heart remembers how to feel. You are that person for me. You are the
-          warmth I reach for on my coldest days, the calm in every storm I
-          face, and the reason I believe that beautiful things are still
-          possible in this world. You don't just mean the world to me, you are
-          my world, my gravity, my reason for smiling at nothing at all. I hope
-          you never forget how deeply, truly, endlessly you are loved.
+          Papa & Bunda, kehadiran kalian di hidupku adalah anugerah terindah. Kalian adalah 
+          tiang penyangga yang kokoh, pemberi teladan terbaik, dan pelindung yang tak pernah 
+          lelah merawatku. Semua dedikasi, air mata, serta peluh yang kalian tumpahkan untuk 
+          membesarkanku adalah utang budi yang tak akan pernah bisa kulunasi. Terima kasih karena 
+          selalu percaya padaku, memelukku di kala sulit, dan menyirami hari-hariku dengan kasih 
+          sayang tak bersyarat. Semoga kalian selalu diberikan kesehatan, kebahagiaan, dan kedamaian 
+          di setiap langkah hidup kalian.
         </p>
       </div>
 
       {/* Pulsing heart */}
       <div className={`reveal reveal-delay-3 ${isVisible ? 'visible' : ''}`}>
-        <span className="finale__heart">💗</span>
+        <span className="finale__heart">💙</span>
       </div>
 
       {/* Signature */}
       <p className={`finale__signature reveal reveal-delay-4 ${isVisible ? 'visible' : ''}`}>
-        Made with endless love, just for you 🌸
+        Dibuat dengan cinta dan rasa syukur yang tak terhingga 💙
       </p>
 
       {/* Footer */}
       <p className="finale__footer">
-        🌹 crafted with love &amp; rose petals 🌸
+        💙 Dibuat dengan segenap cinta &amp; rasa terima kasih yang mendalam 💙
       </p>
     </section>
   );

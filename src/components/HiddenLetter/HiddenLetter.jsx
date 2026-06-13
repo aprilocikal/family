@@ -4,11 +4,11 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import './HiddenLetter.css';
 import { triggerFireworks } from '../../utils/fireworks';
-import { MailOpen, Heart, X } from 'lucide-react';
+import { MailOpen, Heart, X, Flower, Flower2 } from 'lucide-react';
 
 
 const LETTER_TEXT =
-  'Dear Naylin, There are words I keep hidden in the corners of my heart, words too precious for ordinary moments. You are the reason I believe in magic, the reason my world has color. Every time I see you, my heart whispers that it has found its home. You are not just special, you are my everything. Forever yours. 💕';
+  'Dear Papa & Bunda, terima kasih telah menjadi pelindung terbaik, pemberi nasihat paling bijak, dan cinta pertama dalam hidupku. Segala pengorbanan yang tak ternilai, ketabahan menghadapi setiap tantanganku, serta kasih sayang yang tiada henti akan selalu kujaga dan kuingat di dalam hati. Kalian adalah alasan duniaku dipenuhi warna dan kebahagiaan. Semoga kebaikan dan kebahagiaan selalu menyelimuti langkah kalian. Selamanya menyayangi kalian. 💙';
 
 const TYPING_SPEED = 38; // ms per character
 
@@ -108,7 +108,7 @@ export default function HiddenLetter({ isVisible = true }) {
           className="hidden-letter__trigger"
           onClick={handleEnvelopeClick}
           aria-label="Open secret letter"
-          title="A secret letter for you"
+          title="A tribute letter for you"
         >
           <MailOpen size={24} style={{ color: 'var(--rose-gold)' }} />
         </button>
@@ -136,7 +136,7 @@ export default function HiddenLetter({ isVisible = true }) {
 
           {/* Title */}
           <h3 className="hidden-letter__title">
-            A Secret Letter For You <Heart size={18} fill="currentColor" style={{ display: 'inline-block', verticalAlign: 'middle', marginLeft: '6px', color: 'var(--rose-gold)' }} />
+            A Secret Tribute For You <Heart size={18} fill="currentColor" style={{ display: 'inline-block', verticalAlign: 'middle', marginLeft: '6px', color: 'var(--rose-gold)' }} />
           </h3>
 
           {/* Letter body with typewriter */}
@@ -154,8 +154,11 @@ export default function HiddenLetter({ isVisible = true }) {
             className={`hidden-letter__flourish ${
               typingDone ? 'hidden-letter__flourish--visible' : ''
             }`}
+            style={{ display: 'flex', justifyContent: 'center', gap: '8px', alignItems: 'center', color: 'var(--rose-gold)' }}
           >
-            ✿ ❀ ✿
+            <Flower size={18} />
+            <Flower2 size={22} style={{ color: 'var(--blush)' }} />
+            <Flower size={18} />
           </div>
         </div>
       </div>

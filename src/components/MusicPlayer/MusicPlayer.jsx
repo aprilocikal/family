@@ -3,9 +3,8 @@
    ============================================================ */
 import { useState, useRef, useEffect, useCallback } from 'react';
 import './MusicPlayer.css';
-import irisSong from './Goo Goo Dolls - Iris (Lyrics).mp3';
-
-const AUDIO_SRC = irisSong;
+import { Play, Pause } from 'lucide-react';
+const AUDIO_SRC = '/music/Nadin Amizah - Bertaut (Official Music Video).mp3';
 
 export default function MusicPlayer({ isVisible = true, forcePlay = false }) {
   const audioRef = useRef(null);
@@ -102,8 +101,8 @@ export default function MusicPlayer({ isVisible = true, forcePlay = false }) {
 
       {/* Song info pill */}
       <div className="music-player__info">
-        <span className="music-player__song">Iris</span>
-        <span className="music-player__artist">Goo Goo Dolls</span>
+        <span className="music-player__song">Bertaut</span>
+        <span className="music-player__artist">Nadin Amizah</span>
       </div>
 
       {/* Vinyl button */}
@@ -114,6 +113,13 @@ export default function MusicPlayer({ isVisible = true, forcePlay = false }) {
         title={isDisabled ? 'Audio unavailable' : isPlaying ? 'Pause' : 'Play'}
       >
         <div className={vinylClasses} />
+        <div className="music-player__icon-overlay">
+          {isPlaying ? (
+            <Pause size={11} fill="currentColor" />
+          ) : (
+            <Play size={11} fill="currentColor" style={{ marginLeft: '1px' }} />
+          )}
+        </div>
       </button>
     </div>
   );

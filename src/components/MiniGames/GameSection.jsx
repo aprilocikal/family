@@ -4,18 +4,15 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import LoveQuiz from './LoveQuiz';
 import MemoryMatch from './MemoryMatch';
-import CatchHearts from './CatchHearts';
-import RobloxTower from './RobloxTower';
-import RobloxObby3D from './RobloxObby3D';
 import './GameSection.css';
 import { X } from 'lucide-react';
 
 const GAMES = [
   {
     id: 'love-quiz',
-    emoji: '💕',
-    title: 'Love Quiz',
-    desc: 'How well do you know me?',
+    emoji: '💙',
+    title: 'Family Trivia',
+    desc: 'How well do you know Papa & Bunda?',
     Component: LoveQuiz,
   },
   {
@@ -24,27 +21,6 @@ const GAMES = [
     title: 'Memory Match',
     desc: 'Find the matching pairs',
     Component: MemoryMatch,
-  },
-  {
-    id: 'catch-hearts',
-    emoji: '💗',
-    title: 'Catch Hearts',
-    desc: 'Catch falling hearts!',
-    Component: CatchHearts,
-  },
-  {
-    id: 'tower-climb',
-    emoji: '🗼',
-    title: 'Tower of Seasons',
-    desc: 'Climb a multiplayer obstacle tower together!',
-    Component: RobloxTower,
-  },
-  {
-    id: 'roblox-obby-3d',
-    emoji: '🧱',
-    title: 'Roblox Obby 3D',
-    desc: 'Exactly like the real 3D Roblox obby game!',
-    Component: RobloxObby3D,
   },
 ];
 
@@ -67,35 +43,7 @@ export default function GameSection() {
     };
   }, [activeGame]);
 
-  // Handle game-to-parent music coordination (pause Iris when any game starts, resume on close)
-  useEffect(() => {
-    if (!activeGame) return;
 
-    const audioEl = document.querySelector('.music-player audio');
-    let wasPlaying = false;
-
-    if (audioEl && !audioEl.paused) {
-      audioEl.pause();
-      wasPlaying = true;
-    }
-
-    const handleMessage = (e) => {
-      if (e.data && e.data.type === 'naylin-game-music' && e.data.action === 'pause') {
-        if (audioEl && !audioEl.paused) {
-          audioEl.pause();
-          wasPlaying = true;
-        }
-      }
-    };
-    window.addEventListener('message', handleMessage);
-
-    return () => {
-      window.removeEventListener('message', handleMessage);
-      if (wasPlaying && audioEl) {
-        audioEl.play().catch(() => {});
-      }
-    };
-  }, [activeGame]);
 
   // Scroll-reveal observer
   useEffect(() => {
@@ -122,9 +70,9 @@ export default function GameSection() {
   return (
     <section id="games" className="games" ref={sectionRef}>
       <div className="section-inner">
-        <p className="section-eyebrow reveal">lets have some fun</p>
+        <p className="section-eyebrow reveal">fun times together</p>
         <h2 className="section-title reveal reveal-delay-1">
-          Play <em>With Me</em>
+          Play <em>A Game</em>
         </h2>
 
         <div className="games-grid">

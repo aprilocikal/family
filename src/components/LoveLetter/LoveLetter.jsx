@@ -6,21 +6,25 @@ const LoveLetter = () => {
   const sectionRef = useRef(null);
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('revealed');
-          }
-        });
-      },
-      { threshold: 0.15 }
-    );
+    const handleScroll = () => {
+      const revealEls = sectionRef.current?.querySelectorAll('.reveal');
+      if (!revealEls) return;
 
-    const revealEls = sectionRef.current?.querySelectorAll('.reveal');
-    revealEls?.forEach((el) => observer.observe(el));
+      const triggerBottom = (window.innerHeight / 5) * 4.2;
 
-    return () => observer.disconnect();
+      revealEls.forEach((el) => {
+        const boxTop = el.getBoundingClientRect().top;
+        if (boxTop < triggerBottom) {
+          el.classList.add('revealed');
+          el.classList.add('visible');
+        }
+      });
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    setTimeout(handleScroll, 100);
+
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   return (
@@ -28,8 +32,8 @@ const LoveLetter = () => {
       {/* Floating petals around the card */}
       <div className="ll-petal ll-petal-1" aria-hidden="true" style={{ color: 'var(--rose-gold)' }}><Flower size={18} /></div>
       <div className="ll-petal ll-petal-2" aria-hidden="true" style={{ color: 'var(--blush)' }}><Flower2 size={18} /></div>
-      <div className="ll-petal ll-petal-3" aria-hidden="true">✿</div>
-      <div className="ll-petal ll-petal-4" aria-hidden="true">❀</div>
+      <div className="ll-petal ll-petal-3" aria-hidden="true" style={{ color: 'var(--rose-gold)' }}><Flower size={18} /></div>
+      <div className="ll-petal ll-petal-4" aria-hidden="true" style={{ color: 'var(--blush)' }}><Flower2 size={18} /></div>
       <div className="ll-petal ll-petal-5" aria-hidden="true" style={{ color: 'var(--rose-gold)' }}><Flower size={18} /></div>
       <div className="ll-petal ll-petal-6" aria-hidden="true" style={{ color: 'var(--blush)' }}><Flower2 size={18} /></div>
 
@@ -44,46 +48,43 @@ const LoveLetter = () => {
 
           {/* Eyebrow */}
           <span className="section-eyebrow reveal reveal-delay-1">
-            from the bottom of my heart
+            a letter of endless gratitude
           </span>
 
           {/* Title */}
           <h2 className="section-title ll-title reveal reveal-delay-2">
-            In This World of Billions
+            To My Beloved Parents
             <br />
-            <em>I Found You</em>
+            <em>You Are My Home</em>
           </h2>
 
           {/* Decorative divider */}
           <div className="ll-divider reveal reveal-delay-2">
             <span></span>
-            <span className="ll-divider-heart">♥</span>
+            <span className="ll-divider-heart">💙</span>
             <span></span>
           </div>
 
           {/* Body paragraphs */}
           <div className="ll-body">
             <p className="ll-paragraph reveal reveal-delay-3">
-              Naylin, in a universe filled with endless faces and fleeting moments, 
-              you are the one my soul recognized before my eyes ever found you. 
-              You make the ordinary feel sacred. A quiet morning, a simple glance, 
-              or a shared silence, all of it becomes poetry when you are near. 
-              I never knew that someone could hold the power to make the whole world 
-              feel softer, warmer, and infinitely more beautiful just by existing.
+              Papa & Bunda, di dalam semesta yang begitu luas dengan segala kesibukannya,
+              kalian adalah pelabuhan terbaik tempatku pulang. Terima kasih atas setiap peluh,
+              doa yang tak pernah putus, dan kasih sayang tanpa syarat yang telah mendewasakanku.
+              Setiap langkah yang kujalani hari ini adalah berkat ketulusan, kesabaran, dan
+              pengorbanan yang tak terhingga yang telah kalian berikan sepanjang hidup kalian.
             </p>
             <p className="ll-paragraph reveal reveal-delay-4">
-              Every day with you is a reminder that some things in life are too 
-              precious to be explained, they can only be felt. You are my calm 
-              in the chaos, my light when the world goes dark, and the reason I 
-              believe that love is not just a word but a living, breathing miracle. 
-              I don't just love you for who you are, I love who I become when I'm 
-              with you. You are, and will always be, my most beautiful discovery.
+              Setiap momen bersama kalian adalah pengingat bahwa cinta yang paling tulus adalah
+              cinta orang tua kepada anaknya. Kalian adalah cahaya penuntun saat duniaku terasa gelap,
+              dan penyemangat terbaik di setiap jatuh bangun hidupku. Aku sangat bersyukur terlahir
+              sebagai anak kalian, dan aku berharap bisa membuat kalian bangga serta bahagia.
             </p>
           </div>
 
           {/* Signature */}
           <p className="ll-signature reveal reveal-delay-5">
-            From someone who adores you <Heart size={16} fill="currentColor" style={{ display: 'inline-block', verticalAlign: 'middle', marginLeft: '6px', color: 'var(--rose-gold)' }} />
+            Dengan segenap rasa sayang <Heart size={16} fill="currentColor" style={{ display: 'inline-block', verticalAlign: 'middle', marginLeft: '6px', color: 'var(--rose-gold)' }} />
           </p>
         </div>
       </div>

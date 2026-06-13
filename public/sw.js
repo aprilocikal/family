@@ -1,4 +1,4 @@
-const CACHE_NAME = 'naylin-cache-v1';
+const CACHE_NAME = 'parents-cache-v1';
 const ASSETS = [
   '/',
   '/index.html',

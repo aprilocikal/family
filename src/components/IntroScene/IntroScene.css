@@ -11,9 +11,9 @@
   align-items: center;
   justify-content: center;
   background:
-    radial-gradient(ellipse at 50% 40%, rgba(245, 126, 182, 0.15) 0%, transparent 60%),
-    radial-gradient(ellipse at 20% 80%, rgba(212, 165, 116, 0.1) 0%, transparent 50%),
-    radial-gradient(ellipse at 80% 20%, rgba(255, 194, 222, 0.2) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 40%, rgba(94, 184, 245, 0.15) 0%, transparent 60%),
+    radial-gradient(ellipse at 20% 80%, rgba(128, 200, 230, 0.1) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 20%, rgba(184, 222, 255, 0.2) 0%, transparent 50%),
     var(--bg-deep);
   cursor: pointer;
   transition: opacity 0.8s var(--ease-out-expo);
@@ -135,7 +135,7 @@
   height: 56px;
   border-radius: 50%;
   background: radial-gradient(circle at 35% 35%,
-    #D4A574,
+    #74A5D4,
     #B8860B 40%,
     #8B6914 70%,
     #6B4F12
@@ -160,13 +160,15 @@
   border: 1.5px solid rgba(255, 255, 255, 0.15);
 }
 
-.wax-seal-letter {
-  font-family: var(--font-display);
-  font-size: 1.4rem;
-  font-weight: 700;
+.wax-seal-heart {
   color: #FFF5EE;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-  line-height: 1;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.4));
+  animation: heartbeat-mini 2.5s ease-in-out infinite;
+}
+
+@keyframes heartbeat-mini {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.12); }
 }
 
 .envelope-container.opened .wax-seal {
@@ -215,7 +217,7 @@
 .letter-line {
   width: 70%;
   height: 2px;
-  background: rgba(200, 116, 138, 0.25);
+  background: rgba(116, 165, 200, 0.25);
   border-radius: 1px;
 }
 
@@ -386,8 +388,9 @@
     height: 48px;
   }
 
-  .wax-seal-letter {
-    font-size: 1.2rem;
+  .wax-seal-heart {
+    width: 18px;
+    height: 18px;
   }
 
   .intro-prompt {

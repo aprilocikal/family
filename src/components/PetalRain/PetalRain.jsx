@@ -7,10 +7,10 @@ import './PetalRain.css';
 const PETAL_COUNT = 18;
 
 const PETAL_COLORS = [
-  { r: 245, g: 126, b: 182 }, // bubble gum rose-gold
-  { r: 255, g: 194, b: 222 }, // blush
-  { r: 255, g: 170, b: 205 }, // soft pink
-  { r: 235, g: 100, b: 155 }, // mid rose
+  { r: 94, g: 184, b: 245 }, // sky blue
+  { r: 184, g: 222, b: 255 }, // light blue
+  { r: 140, g: 200, b: 255 }, // soft ice blue
+  { r: 58, g: 142, b: 212 }, // azure blue
 ];
 
 function createPetal(canvasWidth, canvasHeight, randomY = false) {

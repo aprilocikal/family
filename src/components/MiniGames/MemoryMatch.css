@@ -158,4 +158,29 @@
   .memory-stats {
     gap: 16px;
   }
+
+  /* Victory screen adjustments on mobile */
+  .memory-victory {
+    padding: 12px 0;
+  }
+
+  .memory-victory-emoji {
+    font-size: 2.8rem;
+    margin-bottom: 8px;
+  }
+
+  .memory-victory-title {
+    font-size: 1.3rem;
+    margin-bottom: 10px;
+  }
+
+  .memory-victory-msg {
+    font-size: 1rem;
+    margin: 10px 0 16px;
+  }
+
+  .memory-victory .btn-rose {
+    padding: 10px 20px;
+    font-size: 0.95rem;
+  }
 }
