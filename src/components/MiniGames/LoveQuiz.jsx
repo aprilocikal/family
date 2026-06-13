@@ -63,54 +63,29 @@ const BUNDA_QUESTIONS = [
 
 const PAPA_QUESTIONS = [
   {
-    q: "Apa hal yang paling cepat meredakan rasa lelah Bunda setelah seharian sibuk?",
-    options: ['Waktu tenang (me-time) sejenak', 'Kata-kata manis dan pelukan dari Papa', 'Melihat rumah bersih dan rapi', 'Dipijat pundaknya oleh Papa tercinta'],
+    q: "Live TikTok siapa yang paling Bunda sukai?",
+    options: ['Artis', 'Menyanyi', 'Travelling', 'Edis TV'],
+    correct: 3,
+  },
+  {
+    q: "Apa hobi Bunda saat luang?",
+    options: ['Baking', 'Jalan-jalan', 'Menjahit', 'Menyetrika'],
+    correct: 0,
+  },
+  {
+    q: "Tanggal 13 Juni 2026, Bunda membeli kue apa?",
+    options: ['Roti', 'Bolu', 'Donat', 'Teripang'],
+    correct: 3,
+  },
+  {
+    q: "Bunda kalau beli di Bakwan Mandala, baksonya berapa?",
+    options: ['2', '3', '4', '5'],
     correct: 1,
   },
   {
-    q: "Momen sederhana apa yang paling membuat Bunda merasa disayangi oleh Papa?",
-    options: ['Saat Papa membantu tanpa diminta', 'Saat Papa mendengarkan ceritanya dengan fokus', 'Saat dibawakan camilan kecil kesukaannya', 'Semua perhatian kecil yang Papa berikan'],
-    correct: 3,
-  },
-  {
-    q: "Dari semua kebiasaan Papa, mana yang paling sering membuat Bunda tersenyum gemas?",
-    options: ['Saat Papa mencoba melucu tapi garing', 'Saat Papa memanjakan anak-anak', 'Saat Papa menatap Bunda penuh cinta', 'Saat Papa lahap memakan masakan Bunda'],
-    correct: 2,
-  },
-  {
-    q: "Apa hal yang paling Bunda utamakan demi kenyamanan keluarga di rumah?",
-    options: ['Kebersihan dan kerapian setiap sudut rumah', 'Kesehatan dan asupan gizi keluarga', 'Suasana rumah yang hangat dan penuh tawa', 'Semua hal di atas selalu dijaga Bunda'],
-    correct: 3,
-  },
-  {
-    q: "Jika Bunda bisa memilih satu kado paling berharga dari Papa, apakah itu?",
-    options: ['Waktu berkualitas berdua saja tanpa gangguan', 'Kesehatan dan kehadiran Papa di sampingnya', 'Bantuan tulus Papa dalam keseharian', 'Semua cinta, waktu, dan kesetiaan Papa'],
-    correct: 3,
-  },
-  {
-    q: "Apa yang biasanya Bunda lakukan ketika ingin memanjakan dirinya setelah lelah?",
-    options: ['Menonton serial drama kesukaannya', 'Berbelanja atau melihat-lihat online shop', 'Tidur siang dengan tenang', 'Menikmati teh/kopi hangat di sudut favorit'],
-    correct: 1,
-  },
-  {
-    q: "Apa kekhawatiran terbesar Bunda dalam merawat keluarga sehari-hari?",
-    options: ['Kesehatan Papa dan anak-anak yang terganggu', 'Kebutuhan keluarga yang kurang terpenuhi', 'Pendidikan dan masa depan anak-anak', 'Semua yang menyangkut kebahagiaan keluarga'],
-    correct: 3,
-  },
-  {
-    q: "Mendengar kata-kata pujian seperti apa yang paling membuat hati Bunda berbunga-bunga?",
-    options: ['"Terima kasih sudah merawat kami dengan luar biasa"', '"Bunda terlihat sangat cantik hari ini"', '"Masakan Bunda hari ini enak sekali!"', 'Semua kalimat apresiasi tulus dari Papa'],
-    correct: 3,
-  },
-  {
-    q: "Di mana tempat liburan impian Bunda yang sering ia ceritakan atau bayangkan?",
-    options: ['Tempat pegunungan yang sejuk dan damai', 'Pantai dengan suara ombak yang menenangkan', 'Kota wisata yang ramai dan penuh tempat berfoto', 'Ke mana saja, asalkan perginya lengkap bersama keluarga'],
-    correct: 3,
-  },
-  {
-    q: "Bagaimana cara Bunda menunjukkan rasa sayangnya yang paling sering Papa rasakan?",
-    options: ['Menyiapkan segala keperluan Papa sebelum diminta', 'Menanyakan kabar dan mendengarkan keluh kesah Papa', 'Menyambut Papa dengan senyuman hangat di depan pintu', 'Semua tindakan penuh kasih sayang di atas'],
-    correct: 3,
+    q: "Kalau di mall, Bunda biasanya beli make up di mana?",
+    options: ['Sephora', 'Sociolla', 'BeautyHaul', 'Sensatia'],
+    correct: 0,
   }
 ];
 

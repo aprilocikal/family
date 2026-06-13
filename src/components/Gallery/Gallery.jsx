@@ -3,20 +3,31 @@ import './Gallery.css';
 import { BookOpen, Camera, Gift, Heart, ChevronLeft, ChevronRight, X, Sparkles, Lightbulb } from 'lucide-react';
 import { triggerFireworks } from '../../utils/fireworks';
 
+// Import actual family images
+import imgUntuk from '../../assets/images/gallery-untuk.webp';
+import imgPapa from '../../assets/images/gallery-2.webp';
+import imgDan from '../../assets/images/gallery-dan.webp';
+import imgBunda from '../../assets/images/gallery-4.webp';
+import imgYang from '../../assets/images/gallery-yang.webp';
+import imgPaling from '../../assets/images/gallery-paling.webp';
+import imgBerharga from '../../assets/images/gallery-berharga.webp';
+import imgAnakAnak from '../../assets/images/gallery-anak-anak.webp';
+
 const PLACEHOLDER_SVG = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="100%" height="100%"><defs><linearGradient id="g1" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="%23E2EDF8"/><stop offset="100%" stop-color="%23F7F9FC"/></linearGradient><linearGradient id="g2" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="%23A5C7E6"/><stop offset="100%" stop-color="%238BB0D6"/></linearGradient><linearGradient id="g3" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="%23C2D8ED"/><stop offset="100%" stop-color="%23A9C7E3"/></linearGradient></defs><rect width="400" height="300" fill="url(%23g1)"/><circle cx="280" cy="110" r="25" fill="%23FCE8B2" opacity="0.9"/><circle cx="280" cy="110" r="35" fill="%23FCE8B2" opacity="0.3"/><polygon points="50,300 190,140 310,300" fill="url(%23g3)" opacity="0.8"/><polygon points="130,300 270,110 420,300" fill="url(%23g2)" opacity="0.9"/><g transform="translate(188, 110)" opacity="0.45"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z" fill="%233A5C8B"/></g></svg>`;
 
-const SLOT_COUNT = 7;
+const SLOT_COUNT = 8;
 
 export default function Gallery() {
   // Each photo: { src: dataURL | null, caption: string, width: number, height: number, isPlaceholder: boolean }
   const [photos, setPhotos] = useState([
-    { src: PLACEHOLDER_SVG, caption: 'untuk', width: 1200, height: 1600, isPlaceholder: true },
+    { src: imgUntuk, caption: 'untuk', width: 494, height: 661, objectPosition: 'center 35%', isPlaceholder: false },
     { src: PLACEHOLDER_SVG, caption: 'papa', width: 900, height: 1600, isPlaceholder: true },
-    { src: PLACEHOLDER_SVG, caption: 'dan', width: 1600, height: 1200, isPlaceholder: true },
+    { src: imgDan, caption: 'dan', width: 494, height: 661, objectPosition: 'center 75%', isPlaceholder: false },
     { src: PLACEHOLDER_SVG, caption: 'bunda', width: 1600, height: 1200, isPlaceholder: true },
-    { src: PLACEHOLDER_SVG, caption: 'yang', width: 1280, height: 960, isPlaceholder: true },
-    { src: PLACEHOLDER_SVG, caption: 'paling', width: 1440, height: 1080, isPlaceholder: true },
-    { src: PLACEHOLDER_SVG, caption: 'berharga', width: 1024, height: 767, isPlaceholder: true },
+    { src: imgYang, caption: 'yang', width: 362, height: 654, objectPosition: 'center 45%', isPlaceholder: false },
+    { src: imgPaling, caption: 'paling', width: 462, height: 658, objectPosition: 'center 20%', isPlaceholder: false },
+    { src: imgBerharga, caption: 'berharga', width: 404, height: 659, objectPosition: 'center 12%', isPlaceholder: false },
+    { src: imgAnakAnak, caption: 'selamanya', width: 909, height: 685, objectPosition: 'center center', isPlaceholder: false },
   ]);
 
   const [columnCount, setColumnCount] = useState(3);
@@ -418,7 +429,12 @@ export default function Gallery() {
                         ) : (
                           <>
                             <div className="polaroid-image-container">
-                              <img src={card.src} alt={card.caption} draggable="false" />
+                              <img 
+                                src={card.src} 
+                                alt={card.caption} 
+                                draggable="false" 
+                                style={{ objectPosition: card.objectPosition || 'center center' }} 
+                              />
                             </div>
                             <div className="polaroid-caption">
                               {card.caption || 'moment'}
