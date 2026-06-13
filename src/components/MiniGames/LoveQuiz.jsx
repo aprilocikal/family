@@ -10,53 +10,28 @@ import ScorecardModal from './ScorecardModal';
 
 const BUNDA_QUESTIONS = [
   {
-    q: "Apa hal pertama yang dicari Papa saat pertama kali sampai di rumah setelah bekerja?",
-    options: ['Segelas air dingin / kopi hangat', 'Mencari keberadaan Bunda tercinta', 'Langsung berganti pakaian santai', 'Mencari HP-nya'],
+    q: "Selasa, Kamis, Sabtu Papa biasanya ngapain?",
+    options: ['Tenis', 'Padel', 'Basket', 'Badminton'],
+    correct: 3,
+  },
+  {
+    q: "Ketika Papa potong rambut di Captain, produk apa yang akan dibeli?",
+    options: ['Serum', 'Minyak Rambut', 'Pomade', 'Hair Mask'],
+    correct: 2,
+  },
+  {
+    q: "Warna sepatu baru Papa?",
+    options: ['Hitam', 'Biru', 'Putih', 'Abu-abu'],
+    correct: 2,
+  },
+  {
+    q: "Dulu Papa olahraganya apa?",
+    options: ['Badminton', 'Basket', 'Lari', 'Tenis'],
     correct: 1,
   },
   {
-    q: "Menurut Papa, apa masakan Bunda yang rasanya paling juara dan tiada tanding?",
-    options: ['Masakan rumah sederhana apa saja buatan Bunda', 'Nasi goreng buatan Bunda di pagi hari', 'Lauk kering/sambal racikan khusus Bunda', 'Semua masakan Bunda adalah restoran bintang lima!'],
-    correct: 3,
-  },
-  {
-    q: "Saat Papa sedang lelah atau stres, apa cara terbaik Bunda untuk mengembalikan senyumnya?",
-    options: ['Membuatkan minuman hangat kesukaannya', 'Memberikan pelukan hangat dan pijatan lembut', 'Mengajaknya mengobrol santai tanpa membahas masalah', 'Mendengarkan keluh kesahnya dengan sabar'],
-    correct: 1,
-  },
-  {
-    q: "Di mata Papa, apa sifat Bunda yang paling membuat Papa jatuh hati setiap harinya?",
-    options: ['Kesabaran Bunda yang luar biasa', 'Senyum manis Bunda yang menenangkan', 'Ketulusan Bunda merawat keluarga', 'Semua pesona Bunda lahir dan batin'],
-    correct: 3,
-  },
-  {
-    q: "Apa impian atau harapan terbesar Papa untuk masa depan bersama Bunda?",
-    options: ['Menikmati masa tua yang damai berdua', 'Melihat anak-anak sukses dan bahagia', 'Selalu sehat dan bergandengan tangan selamanya', 'Semua impian indah di atas'],
-    correct: 3,
-  },
-  {
-    q: "Kapan biasanya Papa terlihat paling rileks dan bahagia di rumah?",
-    options: ['Saat menonton acara favorit/video sambil ngopi', 'Saat bercanda gurau dengan anak-anak dan Bunda', 'Saat akhir pekan bebas dari pekerjaan', 'Semua momen santai di rumah'],
-    correct: 3,
-  },
-  {
-    q: "Apa kebiasaan Papa yang paling sering membuat Bunda tersenyum sendiri?",
-    options: ['Cara Papa tertawa lepas mendengar lelucon', 'Momen ketika Papa perhatian secara tiba-tiba', 'Saat Papa lahap makan masakan Bunda', 'Semua hal kecil romantis yang dilakukan Papa'],
-    correct: 3,
-  },
-  {
-    q: "Jika Papa merencanakan kencan berdua saja dengan Bunda, tempat seperti apa yang akan dipilihnya?",
-    options: ['Makan malam romantis di tempat yang tenang', 'Jalan-jalan santai di taman atau tempat terbuka', 'Menonton bioskop bersama', 'Nongkrong santai di kafe estetis'],
-    correct: 0,
-  },
-  {
-    q: "Apa yang paling Papa hargai dari dukungan Bunda dalam kehidupan sehari-hari?",
-    options: ['Doa-doa tulus Bunda di setiap sujudnya', 'Kehadiran Bunda di kala suka maupun duka', 'Kata-kata penyemangat saat Papa lelah', 'Seluruh pengorbanan dan cinta kasih Bunda'],
-    correct: 3,
-  },
-  {
-    q: "Di hari ulang tahun Papa, hadiah apa yang sebenarnya paling berharga baginya?",
-    options: ['Barang hobi yang sudah lama diimpikan', 'Kehadiran utuh dan senyuman keluarga tercinta', 'Kado buatan tangan yang penuh kenangan', 'Makan malam spesial bersama istri dan anak-anak'],
+    q: "Slogannya Papa?",
+    options: ['Hidup itu santai', 'One for all, all for one', 'Yang penting bahagia', 'Makan dulu, urusan nanti'],
     correct: 1,
   }
 ];
