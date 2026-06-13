@@ -5,9 +5,9 @@ import { triggerFireworks } from '../../utils/fireworks';
 
 // Import actual family images
 import imgUntuk from '../../assets/images/gallery-untuk.webp';
-import imgPapa from '../../assets/images/gallery-2.webp';
+import imgPapa from '../../assets/images/gallery-papa.webp';
 import imgDan from '../../assets/images/gallery-dan.webp';
-import imgBunda from '../../assets/images/gallery-4.webp';
+import imgBunda from '../../assets/images/gallery-bunda.webp';
 import imgYang from '../../assets/images/gallery-yang.webp';
 import imgPaling from '../../assets/images/gallery-paling.webp';
 import imgBerharga from '../../assets/images/gallery-berharga.webp';
@@ -21,9 +21,9 @@ export default function Gallery() {
   // Each photo: { src: dataURL | null, caption: string, width: number, height: number, isPlaceholder: boolean }
   const [photos, setPhotos] = useState([
     { src: imgUntuk, caption: 'untuk', width: 494, height: 661, objectPosition: 'center 35%', isPlaceholder: false },
-    { src: PLACEHOLDER_SVG, caption: 'papa', width: 900, height: 1600, isPlaceholder: true },
+    { src: imgPapa, caption: 'papa', width: 755, height: 661, objectPosition: 'center 40%', isPlaceholder: false },
     { src: imgDan, caption: 'dan', width: 494, height: 661, objectPosition: 'center 75%', isPlaceholder: false },
-    { src: PLACEHOLDER_SVG, caption: 'bunda', width: 1600, height: 1200, isPlaceholder: true },
+    { src: imgBunda, caption: 'bunda', width: 496, height: 659, objectPosition: 'center 35%', isPlaceholder: false },
     { src: imgYang, caption: 'yang', width: 362, height: 654, objectPosition: 'center 45%', isPlaceholder: false },
     { src: imgPaling, caption: 'paling', width: 462, height: 658, objectPosition: 'center 20%', isPlaceholder: false },
     { src: imgBerharga, caption: 'berharga', width: 404, height: 659, objectPosition: 'center 12%', isPlaceholder: false },
